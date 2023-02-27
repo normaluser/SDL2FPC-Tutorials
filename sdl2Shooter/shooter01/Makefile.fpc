@@ -1,0 +1,47 @@
+
+[package]
+name=shooter01
+version=1.0
+
+[target]
+programs=shooter01
+dirs=
+
+[require]
+packages=
+
+[clean]
+files= \
+	$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) \
+	$(wildcard $(COMPILER_UNITTARGETDIR)/*$(PPUEXT)) \
+	$(wildcard *$(OEXT)) \
+	$(wildcard *$(PPUEXT))
+
+[compiler]
+targetdir=.
+unittargetdir=./units/$(CPU_TARGET)-$(OS_TARGET)
+options=-Mobjfpc -Scghi -O2 -g -gl -l -Vewnhibq $(DBG_OPTIONS)
+unitdir= \
+	$(FPCPKGDIR)/sdl2forpascal/units \
+	/usr/local/lib \
+	.
+
+[prerules]
+DBG_OPTIONS=
+ifeq ($(OS_TARGET),darwin)
+	DBG_OPTIONS=-gw
+endif
+
+[rules]
+.PHONY: cleartarget cleardist all
+
+cleartarget:
+	-$(DEL) \
+	$(COMPILER_UNITTARGETDIR)/$(TARGET_PROGRAMS)$(OEXT) \
+	$(COMPILER_UNITTARGETDIR)/$(TARGET_PROGRAMS)$(PPUEXT)
+
+cleardist: clean
+	${DELTREE} \
+	$(COMPILER_UNITTARGETDIR)/*
+
+all: cleartarget $(TARGET_PROGRAMS)$(PPUEXT)

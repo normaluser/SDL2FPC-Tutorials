@@ -1,9 +1,14 @@
 
-# folders
+.DS_Store
+
 **/units/
-**/lib/
 units/
+
+**/lib/
 lib/
 
-# files
-.DS_Store
+shooter[0-9]
+!shooter[0-9]/
+
+shooter[0-9][0-9]
+!shooter[0-9][0-9]/

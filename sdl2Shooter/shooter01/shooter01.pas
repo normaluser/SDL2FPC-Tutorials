@@ -4,12 +4,17 @@
   created: 2023-02-27
 }
 
-program Part1;
+program shooter01;
 
 {$mode objfpc}
 {$h+}
 
-uses sdl2;
+uses
+  { SDL2 }
+  sdl2,
+  { shooter01 }
+  defs, draw, init, input, structs
+  ;
 
 begin
 

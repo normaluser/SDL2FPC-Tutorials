@@ -9,6 +9,8 @@ program Part1;
 {$mode objfpc}
 {$h+}
 
+uses sdl2;
+
 begin
 
 end.

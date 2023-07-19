@@ -1,7 +1,7 @@
 
 // Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
-program shooter01;
+program main;
 
 {$mode objfpc}
 {$h+}

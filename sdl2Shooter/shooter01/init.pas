@@ -37,7 +37,7 @@ begin
     Exit;
   end;
 
-  app.window := SDL_CreateWindow('Shooter 01',
+  app.window := SDL_CreateWindow('Shooter',
                                   SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED,
                                   SCREEN_WIDTH,

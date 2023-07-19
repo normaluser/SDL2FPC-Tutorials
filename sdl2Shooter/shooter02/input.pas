@@ -4,12 +4,12 @@ unit input;
 {$mode objfpc}
 {$H+}
 
-// -------------------- interface --------------------
+// ******************** interface ********************
 interface
 
 function doInput: Boolean;
 
-// -------------------- implementation --------------------
+// ******************** implementation ********************
 implementation
 
 uses

@@ -4,14 +4,14 @@ unit init;
 {$mode objfpc}
 {$H+}
 
-// -------------------- interface --------------------
+// ******************** interface ********************
 interface
 
 function initSDL: Boolean;
 
 procedure cleanup;
 
-// -------------------- implementation --------------------
+// ******************** implementation ********************
 implementation
 
 uses
@@ -37,7 +37,7 @@ begin
     Exit;
   end;
 
-  app.window := SDL_CreateWindow('Shooter 01',
+  app.window := SDL_CreateWindow('Shooter 02',
                                   SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED,
                                   SCREEN_WIDTH,

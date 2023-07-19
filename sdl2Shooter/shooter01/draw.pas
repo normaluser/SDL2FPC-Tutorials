@@ -4,13 +4,13 @@ unit draw;
 {$mode objfpc}
 {$H+}
 
-// -------------------- interface --------------------
+// ******************** interface ********************
 interface
 
 procedure prepareScene;
 procedure presentScene;
 
-// -------------------- implementation --------------------
+// ******************** implementation ********************
 implementation
 
 uses

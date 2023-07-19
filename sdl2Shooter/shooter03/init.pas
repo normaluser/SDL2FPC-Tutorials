@@ -18,7 +18,7 @@ uses
   {rtl}
   sysutils,
   {sdl2}
-  sdl2,
+  sdl2, sdl2_image,
   {base}
   structs, defs;
 
@@ -37,7 +37,7 @@ begin
     Exit;
   end;
 
-  app.window := SDL_CreateWindow('Shooter 01',
+  app.window := SDL_CreateWindow('Shooter 03',
                                   SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED,
                                   SCREEN_WIDTH,
@@ -60,6 +60,8 @@ begin
     Exit;
   end;
 
+  IMG_Init(IMG_INIT_PNG or IMG_INIT_JPG);
+
   Result := true;
   Exit;
 end;
@@ -67,6 +69,7 @@ end;
 // 
 procedure cleanup;
 begin
+  IMG_Quit;
   SDL_DestroyRenderer(app.renderer);
   SDL_DestroyWindow(app.window);
   SDL_Quit;

@@ -4,7 +4,7 @@ unit structs;
 {$mode objfpc}
 {$H+}
 
-// -------------------- interface --------------------
+// ******************** interface ********************
 interface
 
 uses
@@ -27,7 +27,7 @@ var
   app: TApp;
   player: TEntity;
 
-// -------------------- implementation --------------------
+// ******************** implementation ********************
 implementation
 
 end.

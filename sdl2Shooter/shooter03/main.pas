@@ -1,8 +1,5 @@
-{
-  Opening a SDL2 - Window
-  author: shenchunqian
-  created: 2023-02-27
-}
+
+// Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
 program shooter02;
 

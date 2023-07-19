@@ -4,7 +4,7 @@ unit structs;
 {$mode objfpc}
 {$H+}
 
-{-------------------- interface --------------------}
+// -------------------- interface --------------------
 interface
 
 uses
@@ -20,7 +20,7 @@ type
 var
   app: TApp;
 
-{-------------------- implementation --------------------}
+// -------------------- implementation --------------------
 implementation
 
 end.

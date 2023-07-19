@@ -4,14 +4,14 @@ unit init;
 {$mode objfpc}
 {$H+}
 
-{-------------------- interface --------------------}
+// -------------------- interface --------------------
 interface
 
 function initSDL: Boolean;
 
 procedure cleanup;
 
-{-------------------- implementation --------------------}
+// -------------------- implementation --------------------
 implementation
 
 uses
@@ -22,6 +22,7 @@ uses
   {base}
   structs, defs;
 
+// 
 function initSDL: Boolean;
 var
   rendererFlags, windowFlags: Integer;
@@ -63,6 +64,7 @@ begin
   Exit;
 end;
 
+// 
 procedure cleanup;
 begin
   SDL_DestroyRenderer(app.renderer);

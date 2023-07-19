@@ -4,7 +4,7 @@ unit draw;
 {$mode objfpc}
 {$H+}
 
-{-------------------- interface --------------------}
+// -------------------- interface --------------------
 interface
 
 uses
@@ -17,7 +17,7 @@ procedure blit(texture: PSDL_Texture; x, y: Integer);
 
 function loadTexture(filename: String): PSDL_Texture;
 
-{-------------------- implementation --------------------}
+// -------------------- implementation --------------------
 implementation
 
 uses
@@ -26,17 +26,20 @@ uses
   {base}
   structs;
 
+// 
 procedure prepareScene;
 begin
   SDL_SetRenderDrawColor(app.renderer, 96, 128, 255, 255);
   SDL_RenderClear(app.renderer);
 end;
 
+// 
 procedure presentScene;
 begin
   SDL_RenderPresent(app.renderer);
 end;
 
+// 
 procedure blit(texture: PSDL_Texture; x, y: Integer);
 var
   dest: TSDL_Rect;
@@ -48,6 +51,7 @@ begin
   SDL_RenderCopy(app.renderer, texture, NIL, @dest);
 end;
 
+// 
 function loadTexture(filename: String): PSDL_Texture;
 var
   texture: PSDL_Texture;

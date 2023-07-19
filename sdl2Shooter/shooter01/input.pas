@@ -4,18 +4,19 @@ unit input;
 {$mode objfpc}
 {$H+}
 
-{-------------------- interface --------------------}
+// -------------------- interface --------------------
 interface
 
 function doInput: Boolean;
 
-{-------------------- implementation --------------------}
+// -------------------- implementation --------------------
 implementation
 
 uses
   {sdl2}
   sdl2;
 
+// 
 function doInput: Boolean;
 var
   event: TSDL_Event;

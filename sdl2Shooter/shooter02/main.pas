@@ -15,6 +15,7 @@ uses
   {base}
   defs, structs, init, draw, input;
 
+// 
 procedure atExit;
 begin
   SDL_DestroyRenderer(app.renderer);
@@ -27,6 +28,7 @@ begin
     WriteLn('Successful done.');
 end;
 
+// 
 begin
   if not initSDL then
     Exit;

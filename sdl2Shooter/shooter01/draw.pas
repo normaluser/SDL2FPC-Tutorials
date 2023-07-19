@@ -4,13 +4,13 @@ unit draw;
 {$mode objfpc}
 {$H+}
 
-{-------------------- interface --------------------}
+// -------------------- interface --------------------
 interface
 
 procedure prepareScene;
 procedure presentScene;
 
-{-------------------- implementation --------------------}
+// -------------------- implementation --------------------
 implementation
 
 uses
@@ -19,12 +19,14 @@ uses
   {base}
   structs;
 
+// 
 procedure prepareScene;
 begin
   SDL_SetRenderDrawColor(app.renderer, 96, 128, 255, 255);
   SDL_RenderClear(app.renderer);
 end;
 
+// 
 procedure presentScene;
 begin
   SDL_RenderPresent(app.renderer);

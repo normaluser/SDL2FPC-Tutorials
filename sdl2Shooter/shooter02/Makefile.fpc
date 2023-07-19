@@ -1,10 +1,10 @@
 
 [package]
-name=shooter01
+name=shooter02
 version=1.0
 
 [target]
-programs=shooter01
+programs=shooter02
 dirs=
 
 [require]
@@ -17,7 +17,8 @@ files= \
 	$(wildcard $(COMPILER_UNITTARGETDIR)/*.res) \
 	$(wildcard *$(OEXT)) \
 	$(wildcard *$(PPUEXT)) \
-	$(wildcard *.res)
+	$(wildcard *.res) \
+	$(wildcard symbol_order.fpc)
 
 [compiler]
 targetdir=.

@@ -31,3 +31,16 @@ write-shooter01:
 
 run-shooter01:
 	$(call run-project, sdl2Shooter/shooter01, shooter01)
+
+
+build-shooter02:
+	$(call build-project, sdl2Shooter/shooter02)
+
+clear-shooter02:
+	$(call clear-project, sdl2Shooter/shooter02)
+
+write-shooter02:
+	$(call write-project, sdl2Shooter/shooter02)
+
+run-shooter02:
+	$(call run-project, sdl2Shooter/shooter02, shooter02)

@@ -19,7 +19,7 @@ uses
   sysutils,
   {sdl2}
   sdl2,
-  {shooter01}
+  {base}
   structs, defs;
 
 function initSDL: Boolean;

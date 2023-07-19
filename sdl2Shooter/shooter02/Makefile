@@ -341,7 +341,7 @@ ifeq ($(FULL_TARGET),x86_64-darwin)
 override CLEAN_FILES+=$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) $(wildcard $(COMPILER_UNITTARGETDIR)/*$(PPUEXT)) $(wildcard $(COMPILER_UNITTARGETDIR)/*.res) $(wildcard *$(OEXT)) $(wildcard *$(PPUEXT)) $(wildcard *.res) $(wildcard symbol_order.fpc)
 endif
 ifeq ($(FULL_TARGET),x86_64-darwin)
-override COMPILER_OPTIONS+=-Mobjfpc -Scghi -O2 -g -gl -l -Vewnhibq $(DBG_OPTIONS)
+override COMPILER_OPTIONS+=-Mobjfpc -Scghi -O2 -g -gl -l -Vewnhibq $(DBG_OPTIONS) -o$(TARGET_PROGRAMS)
 endif
 ifeq ($(FULL_TARGET),x86_64-darwin)
 override COMPILER_UNITDIR+=$(FPCPKGDIR)/sdl2forpascal/units /usr/local/lib .
@@ -1689,4 +1689,4 @@ cleartarget:
 cleardist: clean
 	${DELTREE} \
 	$(COMPILER_UNITTARGETDIR)/*
-all: cleartarget $(TARGET_PROGRAMS)$(PPUEXT)
+all: cleartarget main$(PPUEXT)

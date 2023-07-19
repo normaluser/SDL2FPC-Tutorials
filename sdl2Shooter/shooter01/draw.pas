@@ -16,7 +16,7 @@ implementation
 uses
   {sdl2}
   sdl2,
-  {shooter01}
+  {base}
   structs;
 
 procedure prepareScene;

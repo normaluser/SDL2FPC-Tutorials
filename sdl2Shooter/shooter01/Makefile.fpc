@@ -17,12 +17,13 @@ files= \
 	$(wildcard $(COMPILER_UNITTARGETDIR)/*.res) \
 	$(wildcard *$(OEXT)) \
 	$(wildcard *$(PPUEXT)) \
-	$(wildcard *.res)
+	$(wildcard *.res) \
+	$(wildcard symbol_order.fpc)
 
 [compiler]
 targetdir=.
 unittargetdir=./units/$(CPU_TARGET)-$(OS_TARGET)
-options=-Mobjfpc -Scghi -O2 -g -gl -l -Vewnhibq $(DBG_OPTIONS)
+options=-Mobjfpc -Scghi -O2 -g -gl -l -Vewnhibq $(DBG_OPTIONS) -o$(TARGET_PROGRAMS)
 unitdir= \
 	$(FPCPKGDIR)/sdl2forpascal/units \
 	/usr/local/lib \
@@ -46,4 +47,4 @@ cleardist: clean
 	${DELTREE} \
 	$(COMPILER_UNITTARGETDIR)/*
 
-all: cleartarget $(TARGET_PROGRAMS)$(PPUEXT)
+all: cleartarget main$(PPUEXT)

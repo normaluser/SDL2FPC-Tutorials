@@ -12,7 +12,7 @@ program shooter02;
 uses
   {sdl2}
   sdl2,
-  {shooter02}
+  {base}
   defs, structs, init, draw, input;
 
 procedure atExit;

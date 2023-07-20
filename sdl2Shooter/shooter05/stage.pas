@@ -18,6 +18,13 @@ uses
   {base}
   defs, structs, draw;
 
+var
+  player: TEntity;
+  stage_: TStage;
+
+  fighterTexture: PSDL_Texture;
+  bulletTexture: PSDL_Texture;
+
 // 
 procedure fireBullet;
 var
@@ -32,6 +39,7 @@ begin
   bullet^.y := player.y;
   bullet^.dx := PLAYER_BULLET_SPEED;
   bullet^.health := true;
+
   bullet^.texture := bulletTexture;
   SDL_QueryTexture(bullet^.texture, Nil, Nil, @bullet^.w, @bullet^.h);
 
@@ -140,7 +148,7 @@ begin
 
   player.x := 100;
   player.y := 100;
-  player.texture := loadTexture('gfx/player.png');
+  player.texture := fighterTexture;
   SDL_QueryTexture(player.texture, Nil, Nil, @player.w, @player.h);
 end;
 
@@ -156,8 +164,10 @@ begin
   stage_.fighterTail := @stage_.fighterHead;
   stage_.bulletTail := @stage_.bulletHead;
 
-  initPlayer;
+  fighterTexture := loadTexture('gfx/player.png');
   bulletTexture := loadTexture('gfx/playerBullet.png');
+
+  initPlayer;
 end;
 
 end.

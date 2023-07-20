@@ -47,10 +47,6 @@ procedure disposeEntity(e: PEntity);
 
 var
   app: TApp;
-  player: TEntity;
-  stage_: TStage;
-
-  bulletTexture: PSDL_Texture;
 
 // ******************** implementation ********************
 implementation

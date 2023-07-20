@@ -22,6 +22,9 @@ uses
   {base}
   structs, defs;
 
+var
+  app: TApp;
+
 // 
 function initSDL: Boolean;
 var

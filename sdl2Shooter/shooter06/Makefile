@@ -328,14 +328,14 @@ FPMAKE_SKIP_CONFIG=-n
 FPCFPMAKE=$(FPC)
 endif
 endif
-override PACKAGE_NAME=shooter02
+override PACKAGE_NAME=shooter06
 override PACKAGE_VERSION=1.0
 DBG_OPTIONS=
 ifeq ($(OS_TARGET),darwin)
 	DBG_OPTIONS=-gw
 endif
 ifeq ($(FULL_TARGET),x86_64-darwin)
-override TARGET_PROGRAMS+=shooter02
+override TARGET_PROGRAMS+=shooter06
 endif
 ifeq ($(FULL_TARGET),x86_64-darwin)
 override CLEAN_FILES+=$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) $(wildcard $(COMPILER_UNITTARGETDIR)/*$(PPUEXT)) $(wildcard $(COMPILER_UNITTARGETDIR)/*.res) $(wildcard *$(OEXT)) $(wildcard *$(PPUEXT)) $(wildcard *.res) $(wildcard symbol_order.fpc)

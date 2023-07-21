@@ -1,10 +1,10 @@
 
 [package]
-name=shooter04
+name=shooter06
 version=1.0
 
 [target]
-programs=shooter04
+programs=shooter06
 dirs=
 
 [require]

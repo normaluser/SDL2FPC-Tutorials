@@ -84,3 +84,16 @@ write-shooter05:
 
 run-shooter05:
 	$(call run-project, sdl2Shooter/shooter05, shooter05)
+
+# ******************** shooter06 ********************
+build-shooter06:
+	$(call build-project, sdl2Shooter/shooter06)
+
+clear-shooter06:
+	$(call clear-project, sdl2Shooter/shooter06)
+
+write-shooter06:
+	$(call write-project, sdl2Shooter/shooter06)
+
+run-shooter06:
+	$(call run-project, sdl2Shooter/shooter06, shooter06)

@@ -1,7 +1,9 @@
 
-unit stage;
+// Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
-{$mode objfpc}
+unit Shooter.Stage;
+
+{$Mode objfpc}
 {$H+}
 
 // ******************** interface ********************
@@ -15,12 +17,12 @@ implementation
 uses
   {sdl2}
   sdl2,
-  {base}
-  defs, structs, draw;
+  {shooter}
+  Shooter.Defs, Shooter.Structs, Shooter.App, Shooter.Draw;
 
 var
   player: TEntity;
-  stage_: TStage;
+  stage: TStage;
 
   fighterTexture: PSDL_Texture;
   bulletTexture: PSDL_Texture;
@@ -32,8 +34,8 @@ var
 begin
   bullet := createEntity;
 
-  stage_.bulletTail^.next := bullet;
-  stage_.bulletTail := bullet;
+  stage.bulletTail^.next := bullet;
+  stage.bulletTail := bullet;
 
   bullet^.x := player.x;
   bullet^.y := player.y;
@@ -80,9 +82,9 @@ procedure doBullets;
 var
   b, prev: PEntity;
 begin
-  prev := @stage_.bulletHead;
+  prev := @stage.bulletHead;
 
-  b := stage_.bulletHead.next;
+  b := stage.bulletHead.next;
   while b <> Nil do
   begin
     b^.x += b^.dx;
@@ -90,9 +92,9 @@ begin
 
     if b^.x > SCREEN_WIDTH then
     begin
-      if b = stage_.bulletTail then
+      if b = stage.bulletTail then
       begin
-        stage_.bulletTail := prev;
+        stage.bulletTail := prev;
       end;
 
       prev^.next := b^.next;
@@ -118,7 +120,7 @@ procedure drawBullets;
 var
   b: PEntity;
 begin
-  b := stage_.bulletHead.next;
+  b := stage.bulletHead.next;
   while b <> Nil do
   begin
     blit(b^.texture, b^.x, b^.y);
@@ -143,8 +145,8 @@ end;
 // 
 procedure initPlayer;
 begin
-  stage_.fighterTail^.next := @player;
-  stage_.fighterTail := @player;
+  stage.fighterTail^.next := @player;
+  stage.fighterTail := @player;
 
   player.x := 100;
   player.y := 100;
@@ -158,11 +160,11 @@ begin
   app.delegate.logic := @logic;
   app.delegate.draw := @draw;
 
-  stage_.fighterHead := createEntity^;
-  stage_.bulletHead := createEntity^;
+  stage.fighterHead := createEntity^;
+  stage.bulletHead := createEntity^;
 
-  stage_.fighterTail := @stage_.fighterHead;
-  stage_.bulletTail := @stage_.bulletHead;
+  stage.fighterTail := @stage.fighterHead;
+  stage.bulletTail := @stage.bulletHead;
 
   fighterTexture := loadTexture('gfx/player.png');
   bulletTexture := loadTexture('gfx/playerBullet.png');

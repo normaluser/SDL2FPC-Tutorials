@@ -1,15 +1,20 @@
 
-unit defs;
+// Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
-{$mode objfpc}
+unit Shooter.App;
+
+{$Mode objfpc}
 {$H+}
 
 // ******************** interface ********************
 interface
 
-const
-  SCREEN_WIDTH = 1024;
-  SCREEN_HEIGHT = 576;
+uses
+  {shooter}
+  Shooter.Structs;
+
+var
+  app: TApp;
 
 // ******************** implementation ********************
 implementation

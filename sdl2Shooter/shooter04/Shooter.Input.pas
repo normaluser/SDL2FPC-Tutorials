@@ -1,7 +1,9 @@
 
-unit input;
+// Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
-{$mode objfpc}
+unit Shooter.Input;
+
+{$Mode objfpc}
 {$H+}
 
 // ******************** interface ********************
@@ -15,8 +17,8 @@ implementation
 uses
   {sdl2}
   sdl2,
-  {base}
-  structs;
+  {shooter}
+  Shooter.App;
 
 // 
 procedure doKeyUp(event: PSDL_KeyboardEvent);
@@ -28,6 +30,7 @@ begin
       SDL_SCANCODE_DOWN: app.down := false;
       SDL_SCANCODE_LEFT: app.left := false;
       SDL_SCANCODE_RIGHT: app.right := false;
+      SDL_SCANCODE_SPACE: app.fire := false;
     end;
   end;
 end;
@@ -42,6 +45,7 @@ begin
       SDL_SCANCODE_DOWN: app.down := true;
       SDL_SCANCODE_LEFT: app.left := true;
       SDL_SCANCODE_RIGHT: app.right := true;
+      SDL_SCANCODE_SPACE: app.fire := true;
     end;
   end;
 end;

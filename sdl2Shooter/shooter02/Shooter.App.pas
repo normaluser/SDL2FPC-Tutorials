@@ -1,24 +1,21 @@
 
-unit structs;
+// Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
-{$mode objfpc}
+unit Shooter.App;
+
+{$Mode objfpc}
 {$H+}
 
 // ******************** interface ********************
 interface
 
 uses
-  {sdl2}
-  sdl2;
-
-type
-  TApp = record
-    renderer: PSDL_Renderer;
-    window: PSDL_Window;
-  end;
+  {shooter}
+  Shooter.Structs;
 
 var
   app: TApp;
+  player: TEntity;
 
 // ******************** implementation ********************
 implementation

@@ -1,7 +1,9 @@
 
-unit draw;
+// Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
-{$mode objfpc}
+unit Shooter.Draw;
+
+{$Mode objfpc}
 {$H+}
 
 // ******************** interface ********************
@@ -16,8 +18,8 @@ implementation
 uses
   {sdl2}
   sdl2,
-  {base}
-  structs;
+  {shooter}
+  Shooter.App;
 
 // 
 procedure prepareScene;

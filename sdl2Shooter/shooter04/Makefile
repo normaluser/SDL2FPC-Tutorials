@@ -1689,4 +1689,4 @@ cleartarget:
 cleardist: clean
 	${DELTREE} \
 	$(COMPILER_UNITTARGETDIR)/*
-all: cleartarget main$(PPUEXT)
+all: cleartarget $(COMPILER_UNITTARGETDIR) main$(PPUEXT)

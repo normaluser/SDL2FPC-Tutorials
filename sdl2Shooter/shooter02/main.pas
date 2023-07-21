@@ -3,14 +3,14 @@
 
 program main;
 
-{$mode objfpc}
-{$h+}
+{$Mode objfpc}
+{$H+}
 
 uses
   {sdl2}
   sdl2,
-  {base}
-  defs, structs, init, draw, input;
+  {shooter}
+  Shooter.Defs, Shooter.App, Shooter.Init, Shooter.Draw, Shooter.Input;
 
 // 
 procedure atExit;

@@ -1,7 +1,9 @@
 
-unit structs;
+// Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
-{$mode objfpc}
+unit Shooter.Structs;
+
+{$Mode objfpc}
 {$H+}
 
 // ******************** interface ********************
@@ -10,8 +12,8 @@ interface
 uses
   {sdl2}
   sdl2,
-  {base}
-  defs;
+  {shooter}
+  Shooter.Defs;
 
 type
   TDelegate = record
@@ -44,9 +46,6 @@ type
 function createEntity: PEntity;
 
 procedure disposeEntity(e: PEntity);
-
-var
-  app: TApp;
 
 // ******************** implementation ********************
 implementation

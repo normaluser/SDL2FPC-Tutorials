@@ -1,7 +1,9 @@
 
-unit defs;
+// Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
-{$mode objfpc}
+unit Shooter.Defs;
+
+{$Mode objfpc}
 {$H+}
 
 // ******************** interface ********************

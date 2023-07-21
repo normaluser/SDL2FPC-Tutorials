@@ -1,7 +1,9 @@
 
-unit input;
+// Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
-{$mode objfpc}
+unit Shooter.Input;
+
+{$Mode objfpc}
 {$H+}
 
 // ******************** interface ********************
@@ -15,8 +17,8 @@ implementation
 uses
   {sdl2}
   sdl2,
-  {base}
-  structs, defs;
+  {shooter}
+  Shooter.Defs, Shooter.App;
 
 // 
 procedure doKeyUp(event: PSDL_KeyboardEvent);

@@ -1,7 +1,9 @@
 
-unit structs;
+// Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
-{$mode objfpc}
+unit Shooter.Structs;
+
+{$Mode objfpc}
 {$H+}
 
 // ******************** interface ********************
@@ -16,20 +18,13 @@ type
     renderer: PSDL_Renderer;
     window: PSDL_Window;
     up, down, left, right: Boolean;
-    fire: Boolean;
   end;
 
   TEntity = record
-    x, y: Integer;
-    dx, dy: Integer;
-    health: Boolean;
+    x: Integer;
+    y: Integer;
     texture: PSDL_Texture;
   end;
-
-var
-  app: TApp;
-  player: TEntity;
-  bullet: TEntity;
 
 // ******************** implementation ********************
 implementation

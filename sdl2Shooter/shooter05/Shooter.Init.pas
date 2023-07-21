@@ -1,7 +1,9 @@
 
-unit init;
+// Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
-{$mode objfpc}
+unit Shooter.Init;
+
+{$Mode objfpc}
 {$H+}
 
 // ******************** interface ********************
@@ -19,8 +21,8 @@ uses
   sysutils,
   {sdl2}
   sdl2, sdl2_image,
-  {base}
-  structs, defs;
+  {shooter}
+  Shooter.Defs, Shooter.App;
 
 // 
 function initSDL: Boolean;

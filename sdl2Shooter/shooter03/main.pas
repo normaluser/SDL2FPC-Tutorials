@@ -10,7 +10,7 @@ uses
   {sdl2}
   sdl2,
   {shooter}
-  Shooter.Defs, Shooter.App, Shooter.Init, Shooter.Draw, Shooter.Input;
+  Shooter.App, Shooter.Init, Shooter.Draw, Shooter.Input;
 
 // 
 procedure atExit;
@@ -27,8 +27,7 @@ end;
 
 // 
 begin
-  if not initSDL then
-    Exit;
+  initSDL;
 
   player.x := 100;
   player.y := 100;
@@ -39,8 +38,7 @@ begin
   while true do
   begin
     prepareScene;
-    if not doInput then
-      Exit;
+    doInput;
 
     if app.up then player.y := player.y - 4;
     if app.down then player.y := player.y + 4;

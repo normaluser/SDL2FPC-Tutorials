@@ -104,8 +104,7 @@ begin
     end;
 
     prev := b;
-    if (b <> Nil) then
-      b := b^.next;
+    b := b^.next;
   end;
 end;
 

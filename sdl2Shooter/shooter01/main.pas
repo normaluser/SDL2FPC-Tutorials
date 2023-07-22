@@ -10,7 +10,7 @@ uses
   {sdl2}
   sdl2,
   {shooter}
-  Shooter.Defs, Shooter.App, Shooter.Init, Shooter.Draw, Shooter.Input;
+  Shooter.App, Shooter.Init, Shooter.Draw, Shooter.Input;
 
 // 
 procedure atExit;
@@ -18,6 +18,7 @@ begin
   SDL_DestroyRenderer(app.renderer);
   SDL_DestroyWindow(app.window);
   SDL_Quit;
+  
   if ExitCode <> 0 then
     WriteLn(SDL_GetError)
   else
@@ -26,15 +27,13 @@ end;
 
 // 
 begin
-  if not initSDL then
-    Exit;
+  initSDL;
   AddExitProc(@atExit);
 
   while true do
   begin
     prepareScene;
-    if not doInput then
-      Exit;
+    doInput;
     presentScene;
     SDL_Delay(16);
   end;

@@ -9,7 +9,7 @@ unit Shooter.Input;
 // ******************** interface ********************
 interface
 
-function doInput: Boolean;
+procedure doInput;
 
 // ******************** implementation ********************
 implementation
@@ -19,17 +19,15 @@ uses
   sdl2;
 
 // 
-function doInput: Boolean;
+procedure doInput;
 var
   event: TSDL_Event;
 begin
   while SDL_PollEvent(@event) = 1 do
   begin
     case event.Type_ of
-      SDL_QUITEV:
-        Result := false;
+      SDL_QUITEV: Halt(0);
     end;
-    Exit;
   end;
 end;
 

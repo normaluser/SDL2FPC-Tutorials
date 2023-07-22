@@ -10,7 +10,7 @@ uses
   {sdl2}
   sdl2,
   {shooter}
-  Shooter.Defs, Shooter.App, Shooter.Init, Shooter.Draw, Shooter.Input, Shooter.Stage;
+  Shooter.App, Shooter.Init, Shooter.Draw, Shooter.Input, Shooter.Stage;
 
 // 
 procedure atExit;
@@ -47,8 +47,7 @@ var
   then_: Integer;
   remainder: Double;
 begin
-  if not initSDL then
-    Exit;
+  initSDL;
 
   AddExitProc(@atExit);
 
@@ -60,11 +59,9 @@ begin
   while true do
   begin
     prepareScene;
-    if not doInput then
-      Exit;
+    doInput;
 
     app.delegate.logic;
-
     app.delegate.draw;
 
     presentScene;

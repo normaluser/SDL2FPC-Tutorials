@@ -27,8 +27,7 @@ end;
 
 // 
 begin
-  if not initSDL then
-    Exit;
+  initSDL;
 
   player.x := 100;
   player.y := 100;
@@ -41,8 +40,7 @@ begin
   while true do
   begin
     prepareScene;
-    if not doInput then
-      Exit;
+    doInput;
 
     player.x := player.x + player.dx;
     player.y := player.y + player.dy;

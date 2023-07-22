@@ -10,13 +10,15 @@ uses
   {sdl2}
   sdl2,
   {shooter}
-  Shooter.Defs, Shooter.App, Shooter.Init, Shooter.Draw, Shooter.Input;
+  Shooter.App, Shooter.Init, Shooter.Draw, Shooter.Input;
 
 // 
 procedure atExit;
 begin
   SDL_DestroyRenderer(app.renderer);
+
   SDL_DestroyWindow(app.window);
+  
   SDL_Quit;
 
   if ExitCode <> 0 then
@@ -27,8 +29,7 @@ end;
 
 // 
 begin
-  if not initSDL then
-    Exit;
+  initSDL;
 
   player.x := 100;
   player.y := 100;
@@ -39,9 +40,7 @@ begin
   while true do
   begin
     prepareScene;
-    if not doInput then
-      Exit;
-
+    doInput;
     blit(player.texture, player.x, player.y);
     presentScene;
     SDL_Delay(16);

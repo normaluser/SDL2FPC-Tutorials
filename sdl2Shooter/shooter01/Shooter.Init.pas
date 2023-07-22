@@ -9,8 +9,7 @@ unit Shooter.Init;
 // ******************** interface ********************
 interface
 
-function initSDL: Boolean;
-
+procedure initSDL;
 procedure cleanup;
 
 // ******************** implementation ********************
@@ -18,14 +17,14 @@ implementation
 
 uses
   {rtl}
-  sysutils,
+  SysUtils,
   {sdl2}
   sdl2,
   {shooter}
   Shooter.Defs, Shooter.App;
 
 // 
-function initSDL: Boolean;
+procedure initSDL;
 var
   rendererFlags, windowFlags: Integer;
 begin
@@ -35,8 +34,7 @@ begin
   if SDL_Init(SDL_INIT_VIDEO) < 0 then
   begin
     WriteLn(Format('Couldn''t initialize SDL: %s', [SDL_GetError()]));
-    Result := false;
-    Exit;
+    Halt(1);
   end;
 
   app.window := SDL_CreateWindow('Shooter',
@@ -48,8 +46,7 @@ begin
   if app.window = NIL then
   begin
     WriteLn(Format('Failed to open %d x %d window: %s', [SCREEN_WIDTH, SCREEN_WIDTH, SDL_GetError()]));
-    Result := false;
-    Exit;
+    Halt(1);
   end;
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 'linear');
@@ -58,12 +55,8 @@ begin
   if app.renderer = NIL then
   begin
     WriteLn(Format('Failed to create renderer: %s', [SDL_GetError()]));
-    Result := false;
-    Exit;
+    Halt(1);
   end;
-
-  Result := true;
-  Exit;
 end;
 
 // 

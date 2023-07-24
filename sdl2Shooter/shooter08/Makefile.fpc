@@ -1,0 +1,50 @@
+
+[package]
+name=shooter08
+version=1.0
+
+[target]
+programs=shooter08
+dirs=
+
+[require]
+packages=
+
+[clean]
+files= \
+	$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) \
+	$(wildcard $(COMPILER_UNITTARGETDIR)/*$(PPUEXT)) \
+	$(wildcard $(COMPILER_UNITTARGETDIR)/*.res) \
+	$(wildcard *$(OEXT)) \
+	$(wildcard *$(PPUEXT)) \
+	$(wildcard *.res) \
+	$(wildcard symbol_order.fpc)
+
+[compiler]
+targetdir=.
+unittargetdir=./units/$(CPU_TARGET)-$(OS_TARGET)
+options=-Mobjfpc -Schi -O1 -g -gl -l -vewnhibq $(DBG_OPTIONS) -o$(TARGET_PROGRAMS)
+unitdir= \
+	$(FPCPKGDIR)/sdl2forpascal/units \
+	/usr/local/lib \
+	.
+
+[prerules]
+DBG_OPTIONS=
+ifeq ($(OS_TARGET),darwin)
+	DBG_OPTIONS=-gw
+endif
+
+[rules]
+.PHONY: cleartarget cleardist all
+
+cleartarget:
+	-$(DEL) \
+	$(COMPILER_UNITTARGETDIR)/$(TARGET_PROGRAMS)$(OEXT) \
+	$(COMPILER_UNITTARGETDIR)/$(TARGET_PROGRAMS)$(PPUEXT)
+
+cleardist: clean
+	${DELTREE} \
+	$(COMPILER_UNITTARGETDIR)/*
+
+all: cleartarget $(COMPILER_UNITTARGETDIR) main$(PPUEXT)

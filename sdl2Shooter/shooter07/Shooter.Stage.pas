@@ -159,9 +159,7 @@ begin
     if (e <> @player) and ((e^.x < -e^.w) or not e^.health) then
     begin
       if e = self.fighterTail then
-      begin
         self.fighterTail := prev;
-      end;
 
       prev^.next := e^.next;
       disposeEntity(e);

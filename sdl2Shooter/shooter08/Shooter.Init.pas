@@ -17,7 +17,7 @@ implementation
 
 uses
   {rtl}
-  SysUtils,
+  sysutils,
   {sdl2}
   sdl2, sdl2_image,
   {shooter}

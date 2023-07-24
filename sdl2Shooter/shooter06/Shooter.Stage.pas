@@ -48,7 +48,7 @@ begin
   bullet^.texture := bulletTexture;
   SDL_QueryTexture(bullet^.texture, Nil, Nil, @bullet^.w, @bullet^.h);
 
-  bullet^.y := bullet^.y + (player.h Div 2) - (bullet^.h Div 2);
+  bullet^.y += (player.h Div 2) - (bullet^.h Div 2);
   player.reload := 8;
 end;
 
@@ -76,8 +76,8 @@ begin
   if (app.keyboard[SDL_SCANCODE_SPACE] = 1) and (player.reload = 0) then
     fireBullet;
 
-    player.x := player.x + player.dx;
-    player.y := player.y + player.dy;
+    player.x += player.dx;
+    player.y += player.dy;
 end;
 
 // 
@@ -90,8 +90,8 @@ begin
   e := stage.fighterHead.next;
   while e <> Nil do
   begin
-    e^.x := e^.x + e^.dx;
-    e^.y := e^.y + e^.dy;
+    e^.x += e^.dx;
+    e^.y += e^.dy;
 
     if (e <> @player) and (e^.x < -e^.w) then
     begin

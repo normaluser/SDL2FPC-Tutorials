@@ -28,7 +28,16 @@ build-all: \
 	build-shooter04 \
 	build-shooter05 \
 	build-shooter06
+
 clear-all: \
+	clear-shooter01 \
+	clear-shooter02 \
+	clear-shooter03 \
+	clear-shooter04 \
+	clear-shooter05 \
+	clear-shooter06
+
+write-all: \
 	clear-shooter01 \
 	clear-shooter02 \
 	clear-shooter03 \

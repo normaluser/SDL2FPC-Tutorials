@@ -24,7 +24,7 @@ uses
 // 
 procedure prepareScene;
 begin
-  SDL_SetRenderDrawColor(app.renderer, 96, 128, 255, 255);
+  SDL_SetRenderDrawColor(app.renderer, 32, 32, 32, 255);
   SDL_RenderClear(app.renderer);
 end;
 

@@ -42,13 +42,13 @@ begin
     prepareScene;
     doInput;
 
-    player.x := player.x + player.dx;
-    player.y := player.y + player.dy;
+    player.x += player.dx;
+    player.y += player.dy;
 
-    if app.up then player.y := player.y - 4;
-    if app.down then player.y := player.y + 4;
-    if app.left then player.x := player.x - 4;
-    if app.right then player.x := player.x + 4;
+    if app.up then player.y -= 4;
+    if app.down then player.y += 4;
+    if app.left then player.x -= 4;
+    if app.right then player.x += 4;
 
     if app.fire and not bullet.health then
     begin
@@ -59,8 +59,8 @@ begin
       bullet.health := true;
     end;
 
-    bullet.x := bullet.x + bullet.dx;
-    bullet.y := bullet.y + bullet.dy;
+    bullet.x += bullet.dx;
+    bullet.y += bullet.dy;
 
     if bullet.x > SCREEN_WIDTH then
       bullet.health := false;

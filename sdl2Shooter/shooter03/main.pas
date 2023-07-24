@@ -40,10 +40,10 @@ begin
     prepareScene;
     doInput;
 
-    if app.up then player.y := player.y - 4;
-    if app.down then player.y := player.y + 4;
-    if app.left then player.x := player.x - 4;
-    if app.right then player.x := player.x + 4;
+    if app.up then player.y -= 4;
+    if app.down then player.y += 4;
+    if app.left then player.x -= 4;
+    if app.right then player.x += 4;
 
     blit(player.texture, player.x, player.y);
     presentScene;

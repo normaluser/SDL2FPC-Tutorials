@@ -31,14 +31,15 @@ var
   wait, frameTime: Integer;
 begin
   wait := 16 + Trunc(remainder);
-  remainder := remainder - Trunc(remainder);
+  remainder -= Trunc(remainder);
+
   frameTime := SDL_GetTicks - then_;
-  wait := wait - frameTime;
+  wait -= frameTime;
 
   if wait < 1 then
     wait := 1;
   SDL_Delay(wait);
-  remainder := remainder + 0.667;
+  remainder += 0.667;
   then_ := SDL_GetTicks;
 end;
 

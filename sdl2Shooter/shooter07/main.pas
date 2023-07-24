@@ -15,6 +15,8 @@ uses
 // 
 procedure atExit;
 begin
+  deinitStage;
+  
   SDL_DestroyRenderer(app.renderer);
   SDL_DestroyWindow(app.window);
   SDL_Quit;

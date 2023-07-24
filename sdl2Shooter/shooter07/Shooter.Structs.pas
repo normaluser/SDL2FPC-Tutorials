@@ -39,11 +39,6 @@ type
     next: PEntity;
   end;
 
-  TStage = record
-    fighterHead, bulletHead: TEntity;
-    fighterTail, bulletTail: PEntity;
-  end;
-
 // ******************** implementation ********************
 implementation
 

@@ -9,7 +9,38 @@ unit Shooter.Stage;
 // ******************** interface ********************
 interface
 
+uses
+  {shooter}
+  Shooter.Structs;
+
+type
+  TStage = class
+    public
+      fighterHead: TEntity;
+      bulletHead: TEntity;
+      fighterTail: PEntity;
+      bulletTail: PEntity;
+
+      constructor Create;
+      destructor Destroy; override;
+
+    private
+      procedure initPlayer;
+      procedure fireBullet;
+      procedure doPlayer;
+      procedure doFighters;
+      procedure doBullets;
+      procedure drawFighters;
+      procedure drawBullets;
+      procedure spawnEnemies;
+      
+      function bulletHitFighter(b: PEntity): Boolean;
+  end;
+
 procedure initStage;
+procedure deinitStage;
+procedure logic;
+procedure draw;
 
 // ******************** implementation ********************
 implementation
@@ -18,7 +49,7 @@ uses
   {sdl2}
   sdl2,
   {shooter}
-  Shooter.Defs, Shooter.Structs, Shooter.App, Shooter.Draw, Shooter.Util;
+  Shooter.Defs, Shooter.App, Shooter.Draw, Shooter.Util;
 
 var
   player: TEntity;
@@ -31,14 +62,47 @@ var
   enemySpawnTimer: Integer;
 
 // 
-procedure fireBullet;
+constructor TStage.Create;
+begin
+  fighterHead := createEntity^;
+  bulletHead := createEntity^;
+
+  fighterTail := @fighterHead;
+  bulletTail := @bulletHead;
+
+  initPlayer;
+end;
+
+// 
+destructor TStage.Destroy;
+begin
+
+  inherited Destroy;
+end;
+
+// 
+procedure TStage.initPlayer;
+begin
+  self.fighterTail^.next := @player;
+  self.fighterTail := @player;
+
+  player.x := 100;
+  player.y := 100;
+  player.texture := fighterTexture;
+  SDL_QueryTexture(player.texture, Nil, Nil, @player.w, @player.h);
+
+  player.side := SIDE_PLAYER;
+end;
+
+// 
+procedure TStage.fireBullet;
 var
   bullet: PEntity;
 begin
   bullet := createEntity;
 
-  stage.bulletTail^.next := bullet;
-  stage.bulletTail := bullet;
+  self.bulletTail^.next := bullet;
+  self.bulletTail := bullet;
 
   bullet^.x := player.x;
   bullet^.y := player.y;
@@ -54,7 +118,7 @@ begin
 end;
 
 // 
-procedure doPlayer;
+procedure TStage.doPlayer;
 begin
   player.dx := 0;
   player.dy := 0;
@@ -80,13 +144,13 @@ begin
 end;
 
 // 
-procedure doFighters;
+procedure TStage.doFighters;
 var
   e, prev: PEntity;
 begin
-  prev := @stage.fighterHead;
+  prev := @self.fighterHead;
 
-  e := stage.fighterHead.next;
+  e := self.fighterHead.next;
   while e <> Nil do
   begin
     e^.x += e^.dx;
@@ -94,9 +158,9 @@ begin
 
     if (e <> @player) and ((e^.x < -e^.w) or not e^.health) then
     begin
-      if e = stage.fighterTail then
+      if e = self.fighterTail then
       begin
-        stage.fighterTail := prev;
+        self.fighterTail := prev;
       end;
 
       prev^.next := e^.next;
@@ -110,11 +174,95 @@ begin
 end;
 
 // 
-function bulletHitFighter(b: PEntity): Boolean;
+procedure TStage.doBullets;
+var
+  b, prev: PEntity;
+begin
+  prev := @self.bulletHead;
+
+  b := self.bulletHead.next;
+  while b <> Nil do
+  begin
+    b^.x += b^.dx;
+    b^.y += b^.dy;
+
+    if bulletHitFighter(b) or (b^.x > SCREEN_WIDTH) then
+    begin
+      if b = self.bulletTail then
+      begin
+        self.bulletTail := prev;
+      end;
+
+      prev^.next := b^.next;
+      
+      disposeEntity(b);
+      b := prev;
+    end;
+
+    prev := b;
+    b := b^.next;
+  end;
+end;
+
+// 
+procedure TStage.drawFighters;
 var
   e: PEntity;
 begin
-  e := stage.fighterHead.next;
+  e := self.fighterHead.next;
+  while e <> Nil do
+  begin
+    blit(e^.texture, e^.x, e^.y);
+    e := e^.next;
+  end;
+end;
+
+// 
+procedure TStage.drawBullets;
+var
+  b: PEntity;
+begin
+  b := self.bulletHead.next;
+  while b <> Nil do
+  begin
+    blit(b^.texture, b^.x, b^.y);
+    b := b^.next;
+  end;
+end;
+
+// 
+procedure TStage.spawnEnemies;
+var
+  enemy: PEntity;
+begin
+  Dec(enemySpawnTimer);
+  if enemySpawnTimer <= 0 then
+  begin
+    enemy := createEntity;
+    self.fighterTail^.next := enemy;
+    self.fighterTail := enemy;
+
+    enemy^.x := SCREEN_WIDTH;
+    enemy^.y := Random(SCREEN_HEIGHT);
+
+    enemy^.texture := enemyTexture;
+    SDL_QueryTexture(enemy^.texture, Nil, Nil, @enemy^.w, @enemy^.h);
+
+    enemy^.dx := -(2 + Random(4));
+
+    enemy^.side := SIDE_ALIEN;
+    enemy^.health := true;
+
+    enemySpawnTimer := 30 + (Random(60));
+  end;
+end;
+
+// 
+function TStage.bulletHitFighter(b: PEntity): Boolean;
+var
+  e: PEntity;
+begin
+  e := self.fighterHead.next;
   while e <> Nil do
   begin
     if (e^.side <> b^.side) and
@@ -133,117 +281,19 @@ begin
 end;
 
 // 
-procedure doBullets;
-var
-  b, prev: PEntity;
-begin
-  prev := @stage.bulletHead;
-
-  b := stage.bulletHead.next;
-  while b <> Nil do
-  begin
-    b^.x += b^.dx;
-    b^.y += b^.dy;
-
-    if bulletHitFighter(b) or (b^.x > SCREEN_WIDTH) then
-    begin
-      if b = stage.bulletTail then
-      begin
-        stage.bulletTail := prev;
-      end;
-
-      prev^.next := b^.next;
-      
-      disposeEntity(b);
-      b := prev;
-    end;
-
-    prev := b;
-    b := b^.next;
-  end;
-end;
-
-// 
-procedure spawnEnemies;
-var
-  enemy: PEntity;
-begin
-  Dec(enemySpawnTimer);
-  if enemySpawnTimer <= 0 then
-  begin
-    enemy := createEntity;
-    stage.fighterTail^.next := enemy;
-    stage.fighterTail := enemy;
-
-    enemy^.x := SCREEN_WIDTH;
-    enemy^.y := Random(SCREEN_HEIGHT);
-
-    enemy^.texture := enemyTexture;
-    SDL_QueryTexture(enemy^.texture, Nil, Nil, @enemy^.w, @enemy^.h);
-
-    enemy^.dx := -(2 + Random(4));
-
-    enemy^.side := SIDE_ALIEN;
-    enemy^.health := true;
-
-    enemySpawnTimer := 30 + (Random(60));
-  end;
-end;
-
-// 
-procedure drawFighters;
-var
-  e: PEntity;
-begin
-  e := stage.fighterHead.next;
-  while e <> Nil do
-  begin
-    blit(e^.texture, e^.x, e^.y);
-    e := e^.next;
-  end;
-end;
-
-// 
-procedure drawBullets;
-var
-  b: PEntity;
-begin
-  b := stage.bulletHead.next;
-  while b <> Nil do
-  begin
-    blit(b^.texture, b^.x, b^.y);
-    b := b^.next;
-  end;
-end;
-
-// 
 procedure logic;
 begin
-  doPlayer;
-  doFighters;
-  doBullets;
-  spawnEnemies;
+  stage.doPlayer;
+  stage.doFighters;
+  stage.doBullets;
+  stage.spawnEnemies;
 end;
 
 // 
 procedure draw;
 begin
-  drawFighters;
-  drawBullets;
-end;
-
-// 
-procedure initPlayer;
-begin
-  stage.fighterTail^.next := @player;
-  stage.fighterTail := @player;
-
-  player.x := 100;
-  player.y := 100;
-  player.texture := fighterTexture;
-  SDL_QueryTexture(player.texture, Nil, Nil, @player.w, @player.h);
-
-  player.side := SIDE_PLAYER;
+  stage.drawFighters;
+  stage.drawBullets;
 end;
 
 // 
@@ -252,19 +302,20 @@ begin
   app.delegate.logic := @logic;
   app.delegate.draw := @draw;
 
-  stage.fighterHead := createEntity^;
-  stage.bulletHead := createEntity^;
-
-  stage.fighterTail := @stage.fighterHead;
-  stage.bulletTail := @stage.bulletHead;
-
   fighterTexture := loadTexture('gfx/player.png');
   enemyTexture := loadTexture('gfx/enemy.png');
   bulletTexture := loadTexture('gfx/playerBullet.png');
 
-  enemySpawnTimer := 0;
+  stage := TStage.Create;
 
-  initPlayer;
+  enemySpawnTimer := 0;
+end;
+
+// 
+procedure deinitStage;
+begin
+  
+  stage.Destroy;
 end;
 
 end.

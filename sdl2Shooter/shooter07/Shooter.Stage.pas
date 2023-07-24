@@ -18,14 +18,17 @@ uses
   {sdl2}
   sdl2,
   {shooter}
-  Shooter.Defs, Shooter.Structs, Shooter.App, Shooter.Draw;
+  Shooter.Defs, Shooter.Structs, Shooter.App, Shooter.Draw, Shooter.Util;
 
 var
   player: TEntity;
   stage: TStage;
 
   fighterTexture: PSDL_Texture;
+  enemyTexture: PSDL_Texture;
   bulletTexture: PSDL_Texture;
+
+  enemySpawnTimer: Integer;
 
 // 
 procedure fireBullet;
@@ -41,6 +44,7 @@ begin
   bullet^.y := player.y;
   bullet^.dx := PLAYER_BULLET_SPEED;
   bullet^.health := true;
+  bullet^.side := SIDE_PLAYER;
 
   bullet^.texture := bulletTexture;
   SDL_QueryTexture(bullet^.texture, Nil, Nil, @bullet^.w, @bullet^.h);
@@ -73,8 +77,59 @@ begin
   if (app.keyboard[SDL_SCANCODE_SPACE] = 1) and (player.reload = 0) then
     fireBullet;
 
-    player.x += player.dx;
-    player.y += player.dy;
+end;
+
+// 
+procedure doFighters;
+var
+  e, prev: PEntity;
+begin
+  prev := @stage.fighterHead;
+
+  e := stage.fighterHead.next;
+  while e <> Nil do
+  begin
+    e^.x += e^.dx;
+    e^.y += e^.dy;
+
+    if (e <> @player) and ((e^.x < -e^.w) or not e^.health) then
+    begin
+      if e = stage.fighterTail then
+      begin
+        stage.fighterTail := prev;
+      end;
+
+      prev^.next := e^.next;
+      disposeEntity(e);
+      e := prev;
+    end;
+
+    prev := e;
+    e := e^.next;
+  end;
+end;
+
+// 
+function bulletHitFighter(b: PEntity): Boolean;
+var
+  e: PEntity;
+begin
+  e := stage.fighterHead.next;
+  while e <> Nil do
+  begin
+    if (e^.side <> b^.side) and
+    (collision(b^.x, b^.y, b^.w, b^.h, e^.x, e^.y, e^.w, e^.h)) then
+    begin
+      b^.health := false;
+      e^.health := false;
+
+      Result := true;
+      Exit;
+    end;
+    e := e^.next;
+  end;
+
+  Result := false;
 end;
 
 // 
@@ -90,10 +145,12 @@ begin
     b^.x += b^.dx;
     b^.y += b^.dy;
 
-    if b^.x > SCREEN_WIDTH then
+    if bulletHitFighter(b) or (b^.x > SCREEN_WIDTH) then
     begin
       if b = stage.bulletTail then
+      begin
         stage.bulletTail := prev;
+      end;
 
       prev^.next := b^.next;
       
@@ -107,9 +164,43 @@ begin
 end;
 
 // 
-procedure drawPlayer;
+procedure spawnEnemies;
+var
+  enemy: PEntity;
 begin
-  blit(player.texture, player.x, player.y);
+  Dec(enemySpawnTimer);
+  if enemySpawnTimer <= 0 then
+  begin
+    enemy := createEntity;
+    stage.fighterTail^.next := enemy;
+    stage.fighterTail := enemy;
+
+    enemy^.x := SCREEN_WIDTH;
+    enemy^.y := Random(SCREEN_HEIGHT);
+
+    enemy^.texture := enemyTexture;
+    SDL_QueryTexture(enemy^.texture, Nil, Nil, @enemy^.w, @enemy^.h);
+
+    enemy^.dx := -(2 + Random(4));
+
+    enemy^.side := SIDE_ALIEN;
+    enemy^.health := true;
+
+    enemySpawnTimer := 30 + (Random(60));
+  end;
+end;
+
+// 
+procedure drawFighters;
+var
+  e: PEntity;
+begin
+  e := stage.fighterHead.next;
+  while e <> Nil do
+  begin
+    blit(e^.texture, e^.x, e^.y);
+    e := e^.next;
+  end;
 end;
 
 // 
@@ -129,13 +220,15 @@ end;
 procedure logic;
 begin
   doPlayer;
+  doFighters;
   doBullets;
+  spawnEnemies;
 end;
 
 // 
 procedure draw;
 begin
-  drawPlayer;
+  drawFighters;
   drawBullets;
 end;
 
@@ -149,6 +242,8 @@ begin
   player.y := 100;
   player.texture := fighterTexture;
   SDL_QueryTexture(player.texture, Nil, Nil, @player.w, @player.h);
+
+  player.side := SIDE_PLAYER;
 end;
 
 // 
@@ -164,7 +259,10 @@ begin
   stage.bulletTail := @stage.bulletHead;
 
   fighterTexture := loadTexture('gfx/player.png');
+  enemyTexture := loadTexture('gfx/enemy.png');
   bulletTexture := loadTexture('gfx/playerBullet.png');
+
+  enemySpawnTimer := 0;
 
   initPlayer;
 end;

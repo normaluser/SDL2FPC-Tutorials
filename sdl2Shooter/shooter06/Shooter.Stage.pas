@@ -76,8 +76,6 @@ begin
   if (app.keyboard[SDL_SCANCODE_SPACE] = 1) and (player.reload = 0) then
     fireBullet;
 
-    player.x += player.dx;
-    player.y += player.dy;
 end;
 
 // 
@@ -96,9 +94,7 @@ begin
     if (e <> @player) and (e^.x < -e^.w) then
     begin
       if e = stage.fighterTail then
-      begin
         stage.fighterTail := prev;
-      end;
 
       prev^.next := e^.next;
       disposeEntity(e);
@@ -126,9 +122,7 @@ begin
     if b^.x > SCREEN_WIDTH then
     begin
       if b = stage.bulletTail then
-      begin
         stage.bulletTail := prev;
-      end;
 
       prev^.next := b^.next;
       

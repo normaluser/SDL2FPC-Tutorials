@@ -342,8 +342,9 @@ begin
   d := stage.debrisHead.next;
   while d <> Nil do
   begin
-    d^.x := d^.dx;
-    d^.y := d^.dy;
+    d^.x += d^.dx;
+    d^.y += d^.dy;
+    
     d^.dy += 0.5;
 
     Dec(d^.life);

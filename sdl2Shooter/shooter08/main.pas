@@ -30,7 +30,8 @@ end;
 // 
 procedure capFrameRate(var then_: Integer; var remainder: Double);
 var
-  wait, frameTime: Integer;
+  wait: Integer;
+  frameTime: Integer;
 begin
   wait := 16 + Trunc(remainder);
   remainder -= Trunc(remainder);

@@ -26,7 +26,8 @@ uses
 // 
 procedure initSDL;
 var
-  rendererFlags, windowFlags: Integer;
+  rendererFlags: Integer;
+  windowFlags: Integer;
 begin
   rendererFlags := SDL_RENDERER_ACCELERATED;
   windowFlags := 0;

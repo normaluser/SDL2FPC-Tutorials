@@ -17,7 +17,10 @@ type
   TApp = record
     renderer: PSDL_Renderer;
     window: PSDL_Window;
-    up, down, left, right: Boolean;
+    up: Boolean;
+    down: Boolean;
+    left: Boolean;
+    right: Boolean;
   end;
 
   TEntity = record

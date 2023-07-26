@@ -80,7 +80,8 @@ end;
 // 
 procedure doBullets;
 var
-  b, prev: PEntity;
+  b: PEntity;
+  prev: PEntity;
 begin
   prev := @stage.bulletHead;
 

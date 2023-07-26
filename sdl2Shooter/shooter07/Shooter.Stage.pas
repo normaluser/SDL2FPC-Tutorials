@@ -146,7 +146,8 @@ end;
 // 
 procedure TStage.doFighters;
 var
-  e, prev: PEntity;
+  e: PEntity;
+  prev: PEntity;
 begin
   prev := @self.fighterHead;
 
@@ -174,7 +175,8 @@ end;
 // 
 procedure TStage.doBullets;
 var
-  b, prev: PEntity;
+  b: PEntity;
+  prev: PEntity;
 begin
   prev := @self.bulletHead;
 

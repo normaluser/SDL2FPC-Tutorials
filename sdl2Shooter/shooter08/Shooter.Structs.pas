@@ -17,7 +17,8 @@ uses
 
 type
   TDelegate = record
-    logic, draw: procedure;
+    logic: procedure;
+    draw: procedure;
   end;
 
   TApp = record
@@ -29,9 +30,12 @@ type
 
   PEntity = ^TEntity;
   TEntity = record
-    x, y: Double;
-    w, h: Integer;
-    dx, dy: Double;
+    x: Double;
+    y: Double;
+    w: Integer;
+    h: Integer;
+    dx: Double;
+    dy: Double;
     health: Boolean;
     reload: Integer;
     side: Integer;

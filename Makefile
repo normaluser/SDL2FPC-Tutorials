@@ -1,5 +1,5 @@
 
-.PHONY: build clear build-all clear-all
+.PHONY: build clear write build-all clear-all write-all
 
 define build-project
 	@cd $(1) && make
@@ -15,10 +15,6 @@ endef
 
 define run-project
 	@cd $(1) && $(2)
-endef
-
-define debug-project
-	@cd $(1) && cgdb $(2)
 endef
 
 build-all: \
@@ -67,9 +63,6 @@ write-shooter01:
 run-shooter01:
 	$(call run-project, sdl2Shooter/shooter01, shooter01)
 
-debug-shooter01:
-	$(call debug-project, sdl2Shooter/shooter01, shooter01)
-
 # ******************** shooter01 ********************
 build-shooter02:
 	$(call build-project, sdl2Shooter/shooter02)
@@ -82,9 +75,6 @@ write-shooter02:
 
 run-shooter02:
 	$(call run-project, sdl2Shooter/shooter02, shooter02)
-
-debug-shooter02:
-	$(call debug-project, sdl2Shooter/shooter02, shooter02)
 
 # ******************** shooter03 ********************
 build-shooter03:
@@ -99,9 +89,6 @@ write-shooter03:
 run-shooter03:
 	$(call run-project, sdl2Shooter/shooter03, shooter03)
 
-debug-shooter03:
-	$(call debug-project, sdl2Shooter/shooter03, shooter03)
-
 # ******************** shooter04 ********************
 build-shooter04:
 	$(call build-project, sdl2Shooter/shooter04)
@@ -114,9 +101,6 @@ write-shooter04:
 
 run-shooter04:
 	$(call run-project, sdl2Shooter/shooter04, shooter04)
-
-debug-shooter04:
-	$(call debug-project, sdl2Shooter/shooter04, shooter04)
 
 # ******************** shooter05 ********************
 build-shooter05:
@@ -131,9 +115,6 @@ write-shooter05:
 run-shooter05:
 	$(call run-project, sdl2Shooter/shooter05, shooter05)
 
-debug-shooter05:
-	$(call debug-project, sdl2Shooter/shooter05, shooter05)
-
 # ******************** shooter06 ********************
 build-shooter06:
 	$(call build-project, sdl2Shooter/shooter06)
@@ -146,9 +127,6 @@ write-shooter06:
 
 run-shooter06:
 	$(call run-project, sdl2Shooter/shooter06, shooter06)
-
-debug-shooter06:
-	$(call debug-project, sdl2Shooter/shooter06, shooter06)
 
 # ******************** shooter07 ********************
 build-shooter07:
@@ -163,9 +141,6 @@ write-shooter07:
 run-shooter07:
 	$(call run-project, sdl2Shooter/shooter07, shooter07)
 
-debug-shooter07:
-	$(call debug-project, sdl2Shooter/shooter07, shooter07)
-
 # ******************** shooter08 ********************
 build-shooter08:
 	$(call build-project, sdl2Shooter/shooter08)
@@ -179,9 +154,6 @@ write-shooter08:
 run-shooter08:
 	$(call run-project, sdl2Shooter/shooter08, shooter08)
 
-debug-shooter08:
-	$(call debug-project, sdl2Shooter/shooter08, shooter08)
-
 # ******************** shooter09 ********************
 build-shooter09:
 	$(call build-project, sdl2Shooter/shooter09)
@@ -194,6 +166,3 @@ write-shooter09:
 
 run-shooter09:
 	$(call run-project, sdl2Shooter/shooter09, shooter09)
-
-debug-shooter09:
-	$(call debug-project, sdl2Shooter/shooter09, shooter09)

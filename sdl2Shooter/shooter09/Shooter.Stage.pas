@@ -537,7 +537,7 @@ begin
       d^.rect.w := w;
       d^.rect.h := h;
 
-      x += w
+      x += w;
     end;
 
     y += h;

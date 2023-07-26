@@ -33,7 +33,7 @@ function MAX(a, b: Double): Double; inline;
 implementation
 
 // 
-function MIN(a, b: Double): Double; inline;
+function MIN(a, b: Double): Double;
 begin
   if a < b then
     Result := a
@@ -42,7 +42,7 @@ begin
 end;
 
 // 
-function MAX(a, b: Double): Double; inline;
+function MAX(a, b: Double): Double;
 begin
   if a > b then
     Result := a

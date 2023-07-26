@@ -14,7 +14,7 @@ uses
   Shooter.Structs;
 
 type
-  TStage = class
+  TStage = class(TObject)
     public
       fighterHead: TEntity;
       bulletHead: TEntity;

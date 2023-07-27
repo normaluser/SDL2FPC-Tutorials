@@ -21,7 +21,8 @@ uses
   {sdl2}
   sdl2,
   {shooter}
-  Shooter.Defs, Shooter.App;
+  Shooter.Defs,
+  Shooter.App;
 
 // 
 procedure initSDL;

@@ -10,7 +10,10 @@ uses
   {sdl2}
   sdl2,
   {shooter}
-  Shooter.App, Shooter.Init, Shooter.Draw, Shooter.Input;
+  Shooter.App,
+  Shooter.Init,
+  Shooter.Draw,
+  Shooter.Input;
 
 // 
 procedure atExit;

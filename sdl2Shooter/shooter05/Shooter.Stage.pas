@@ -18,7 +18,10 @@ uses
   {sdl2}
   sdl2,
   {shooter}
-  Shooter.Defs, Shooter.Structs, Shooter.App, Shooter.Draw;
+  Shooter.Defs,
+  Shooter.Structs,
+  Shooter.App,
+  Shooter.Draw;
 
 var
   player: TEntity;

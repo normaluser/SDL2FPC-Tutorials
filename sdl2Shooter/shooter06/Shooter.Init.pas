@@ -19,9 +19,11 @@ uses
   {rtl}
   SysUtils,
   {sdl2}
-  sdl2, sdl2_image,
+  sdl2,
+  sdl2_image,
   {shooter}
-  Shooter.Defs, Shooter.App;
+  Shooter.Defs,
+  Shooter.App;
 
 // 
 procedure initSDL;

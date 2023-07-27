@@ -55,7 +55,10 @@ uses
   {sdl2}
   sdl2,
   {shooter}
-  Shooter.Defs, Shooter.App, Shooter.Draw, Shooter.Util;
+  Shooter.Defs,
+  Shooter.App,
+  Shooter.Draw,
+  Shooter.Util;
 
 var
   player: PEntity;

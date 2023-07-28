@@ -13,9 +13,9 @@ uses
   {shooter}
   Shooter.Structs;
 
+// ******************** var ********************
 var
   app: TApp;
-
 
 function createEntity: PEntity;
 function createExplosion: PExplosion;

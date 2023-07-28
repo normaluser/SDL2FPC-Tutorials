@@ -15,13 +15,13 @@ uses
   Shooter.Draw,
   Shooter.Input,
   Shooter.Stage,
-  Shooter.Sound;
+  Shooter.Audio;
 
 // 
 procedure atExit;
 begin
-  destroyAudio;
-  destroyStage;
+  TAudio.destroyAndNil;
+  TStage.destroyAndNil;
   
   SDL_DestroyRenderer(app.renderer);
   SDL_DestroyWindow(app.window);
@@ -52,7 +52,7 @@ begin
   then_ := SDL_GetTicks;
 end;
 
-// 
+// ******************** var ********************
 var
   then_: Integer;
   remainder: Double;
@@ -61,9 +61,9 @@ begin
 
   AddExitProc(@atExit);
 
-  createAudio;
+  TAudio.createAndInit;
 
-  createStage;
+  TStage.createAndInit;
 
   then_ := SDL_GetTicks;
   remainder := 0;

@@ -13,6 +13,7 @@ uses
   {shooter}
   Shooter.Structs;
 
+// ******************** type ********************
 type
   TStage = class(TObject)
     public
@@ -26,12 +27,17 @@ type
       explosionTail: PExplosion;
       debrisTail: PDebris;
 
-      constructor Create;
-      destructor Destroy; override;
+      constructor create;
+      destructor destroy; override;
+
+      class procedure createAndInit;
+      class procedure destroyAndNil;
 
     private
       procedure initPlayer;
       procedure initStarfield;
+
+      procedure reset;
 
       procedure doPlayer;
       procedure doFighters;
@@ -60,9 +66,6 @@ type
       function bulletHitFighter(b: PEntity): Boolean;
   end;
 
-procedure createStage;
-procedure destroyStage;
-procedure resetStage;
 procedure logic;
 procedure draw;
 
@@ -79,8 +82,9 @@ uses
   Shooter.App,
   Shooter.Draw,
   Shooter.Util,
-  Shooter.Sound;
+  Shooter.Audio;
 
+// ******************** var ********************
 var
   player: PEntity;
   stage: TStage;
@@ -98,8 +102,9 @@ var
   stars: array[0..MAX_STARS] of TStar;
 
 // 
-constructor TStage.Create;
+constructor TStage.create;
 begin
+  inherited;
   fighterHead := createEntity^;
   bulletHead := createEntity^;
   explosionHead := createExplosion^;
@@ -109,16 +114,12 @@ begin
   bulletTail := @bulletHead;
   explosionTail := @explosionHead;
   debrisTail := @debrisHead;
-
-  initPlayer;
-  initStarfield;
 end;
 
 // 
-destructor TStage.Destroy;
+destructor TStage.destroy;
 begin
-
-  inherited Destroy;
+  inherited destroy;
 end;
 
 // 
@@ -669,6 +670,53 @@ begin
 end;
 
 // 
+procedure TStage.reset;
+var
+  e: PEntity;
+  ex: PExplosion;
+  d: PDebris;
+begin
+  while fighterHead.next <> Nil do
+  begin
+    e := fighterHead.next;
+    fighterHead.next := e^.next;
+    Dispose(e);
+  end;
+
+  while bulletHead.next <> Nil do
+  begin
+    e := bulletHead.next;
+    bulletHead.next := e^.next;
+    Dispose(e);
+  end;
+
+  while explosionHead.next <> Nil do
+  begin
+    ex := explosionHead.next;
+    explosionHead.next := ex^.next;
+    Dispose(ex);
+  end;
+
+  while debrisHead.next <> Nil do
+  begin
+    d := debrisHead.next;
+    debrisHead.next := d^.next;
+    Dispose(d);
+  end;
+
+  fighterTail := @fighterHead;
+  bulletTail := @bulletHead;
+  explosionTail := @explosionHead;
+  debrisTail := @debrisHead;
+
+  initPlayer;
+  initStarfield;
+
+  enemySpawnTimer := 0;
+  stageResetTimer := FPS * 2;
+end;
+
+// 
 procedure logic;
 begin
   stage.doBackground;
@@ -686,7 +734,7 @@ begin
   begin
     Dec(stageResetTimer);
     if stageResetTimer <= 0 then
-      resetStage;
+      stage.reset;
   end;
 
 end;
@@ -703,62 +751,16 @@ begin
 end;
 
 // 
-procedure resetStage;
-var
-  e: PEntity;
-  ex: PExplosion;
-  d: PDebris;
+class procedure TStage.destroyAndNil;
 begin
-  while stage.fighterHead.next <> Nil do
-  begin
-    e := stage.fighterHead.next;
-    stage.fighterHead.next := e^.next;
-    Dispose(e);
-  end;
-
-  while stage.bulletHead.next <> Nil do
-  begin
-    e := stage.bulletHead.next;
-    stage.bulletHead.next := e^.next;
-    Dispose(e);
-  end;
-
-  while stage.explosionHead.next <> Nil do
-  begin
-    ex := stage.explosionHead.next;
-    stage.explosionHead.next := ex^.next;
-    Dispose(ex);
-  end;
-
-  while stage.debrisHead.next <> Nil do
-  begin
-    d := stage.debrisHead.next;
-    stage.debrisHead.next := d^.next;
-    Dispose(d);
-  end;
-
-  stage.fighterTail := @stage.fighterHead;
-  stage.bulletTail := @stage.bulletHead;
-  stage.explosionTail := @stage.explosionHead;
-  stage.debrisTail := @stage.debrisHead;
-
-  stage.initPlayer;
-  stage.initStarfield;
-
-  enemySpawnTimer := 0;
-  stageResetTimer := FPS * 2;
+  stage.destroy;
 end;
 
 // 
-procedure destroyStage;
+class procedure TStage.createAndInit;
 begin
-  
-  stage.Destroy;
-end;
+  stage := TStage.create;
 
-// 
-procedure createStage;
-begin
   app.delegate.logic := @logic;
   app.delegate.draw := @draw;
 
@@ -771,7 +773,8 @@ begin
 
   audio.playMusic(1);
 
-  stage := TStage.Create;
+  stage.initPlayer;
+  stage.initStarfield;
 
   enemySpawnTimer := 0;
   stageResetTimer := FPS * 2;

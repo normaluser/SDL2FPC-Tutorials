@@ -9,6 +9,7 @@ unit Shooter.Defs;
 // ******************** interface ********************
 interface
 
+// ******************** const ********************
 const
   SCREEN_WIDTH = 1024;
   SCREEN_HEIGHT = 576;

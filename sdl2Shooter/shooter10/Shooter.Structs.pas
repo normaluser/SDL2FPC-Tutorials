@@ -15,6 +15,7 @@ uses
   {shooter}
   Shooter.Defs;
 
+// ******************** type ********************
 type
   TDelegate = record
     logic: procedure;

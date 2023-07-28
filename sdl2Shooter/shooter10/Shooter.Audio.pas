@@ -1,7 +1,7 @@
 
 // Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
 
-unit Shooter.Sound;
+unit Shooter.Audio;
 
 {$Mode objfpc}
 {$H+}
@@ -15,6 +15,7 @@ uses
   {shooter}
   Shooter.Defs;
 
+// ******************** type ********************
 type
   PAudio = ^TAudio;
   TAudio = class(TObject)
@@ -28,16 +29,17 @@ type
       procedure playMusic(loop: Integer);
       procedure playSound(id, channel: Integer);
 
+      class procedure createAndInit;
+      class procedure destroyAndNil;
+
     private
       procedure loadMusic;
       procedure loadSounds;
   end;
 
+// ******************** var ********************
 var
   audio: TAudio;
-
-procedure createAudio;
-procedure destroyAudio;
 
 // ******************** implementation ********************
 implementation
@@ -97,7 +99,7 @@ begin
 end;
 
 // 
-procedure createAudio;
+class procedure TAudio.createAndInit;
 begin
   audio := TAudio.Create;
   
@@ -106,7 +108,7 @@ begin
 end;
 
 // 
-procedure destroyAudio;
+class procedure TAudio.destroyAndNil;
 begin
   audio.destroy;
 end;

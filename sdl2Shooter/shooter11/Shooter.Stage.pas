@@ -487,9 +487,9 @@ begin
   drawText(10, 10, 255, 255, 255, Format('SCORE: %0.3d', [stage.score]));
 
   if (stage.score > 0) and (stage.score = highscore) then
-    drawText(1020, 10, 0, 255, 0, Format('HIGHSCORE: %0.3d', [highscore]))
+    drawText(764, 10, 0, 255, 0, Format('HIGHSCORE: %0.3d', [highscore]))
   else
-    drawText(1020, 10, 255, 255, 255, Format('HIGHSCORE: %0.3d', [highscore]));
+    drawText(764, 10, 255, 255, 255, Format('HIGHSCORE: %0.3d', [highscore]));
 end;
 
 // 

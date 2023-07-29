@@ -14,8 +14,6 @@ const
   SCREEN_WIDTH = 1024;
   SCREEN_HEIGHT = 576;
 
-  MAX_LINE_LENGTH = 255;
-
   FPS = 60;
 
   PLAYER_SPEED = 4;

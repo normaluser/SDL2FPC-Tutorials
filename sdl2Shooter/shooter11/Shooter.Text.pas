@@ -15,12 +15,8 @@ uses
   {shooter}
   Shooter.Defs;
 
-// ******************** type ********************
-type
-  TString = String[MAX_LINE_LENGTH];
-
 procedure initFonts;
-procedure drawText(x, y: Integer; r, g, b: Integer; outText: TString);
+procedure drawText(x, y: Integer; r, g, b: Integer; outText: String);
 
 // ******************** implementation ********************
 implementation
@@ -43,7 +39,7 @@ begin
   fontTexture := loadTexture('gfx/font.png');
 end;
 
-procedure drawText(x, y: Integer; r, g, b: Integer; outText: TString);
+procedure drawText(x, y: Integer; r, g, b: Integer; outText: String);
 var
   i: Integer;
   len: Integer;
@@ -58,7 +54,8 @@ begin
   rect.y := 0;
   SDL_SetTextureColorMod(fontTexture, r, g, b);
 
-  for i := 0 to (len - 1) do
+  // fpc 字符串的索引是从1开始
+  for i := 1 to len do
   begin
     c := outText[i];
     if c in [' '..'Z'] then

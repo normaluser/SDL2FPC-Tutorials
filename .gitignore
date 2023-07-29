@@ -1,13 +1,10 @@
 
 .DS_Store
 
-**/units/
 units/
-
-**/lib/
 lib/
 
-**/Makefile
+Makefile
 !/Makefile
 
 shooter[0-9]

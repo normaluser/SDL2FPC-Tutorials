@@ -290,14 +290,14 @@ begin
   while e <> Nil do
   begin
     if (e <> player) and (player <> Nil) then
+    begin
+      Dec(e^.reload);
+      if e^.reload <= 0 then
       begin
-        Dec(e^.reload);
-        if e^.reload <= 0 then
-        begin
-          fireAlienBullet(e);
-          audio.playSound(SND_ALIEN_FIRE, CH_ALIEN_FIRE);
-        end;
+        fireAlienBullet(e);
+        audio.playSound(SND_ALIEN_FIRE, CH_ALIEN_FIRE);
       end;
+    end;
 
     e := e^.next;
   end;

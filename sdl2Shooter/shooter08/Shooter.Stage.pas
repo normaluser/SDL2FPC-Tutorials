@@ -235,11 +235,11 @@ begin
   while e <> Nil do 
   begin
     if (e <> player) and (player <> Nil) then
-      begin
-        Dec(e^.reload);
-        if e^.reload <= 0 then
-          fireAlienBullet(e);
-      end;
+    begin
+      Dec(e^.reload);
+      if e^.reload <= 0 then
+        fireAlienBullet(e);
+    end;
 
     e := e^.next;
   end;

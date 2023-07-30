@@ -13,25 +13,35 @@ uses
   {shooter}
   Shooter.Structs;
 
+// ******************** type ********************
 type
   TStage = class(TObject)
     public
       fighterHead: TEntity;
       bulletHead: TEntity;
+      pointsHead: TEntity;
       explosionHead: TExplosion;
       debrisHead: TDebris;
 
       fighterTail: PEntity;
       bulletTail: PEntity;
+      pointsTail: PEntity;
       explosionTail: PExplosion;
       debrisTail: PDebris;
 
-      constructor Create;
-      destructor Destroy; override;
+      score: Integer;
+
+      constructor create;
+      destructor destroy; override;
+
+      class procedure createAndInit;
+      class procedure destroyAndNil;
 
     private
       procedure initPlayer;
       procedure initStarfield;
+
+      procedure reset;
 
       procedure doPlayer;
       procedure doFighters;
@@ -41,6 +51,7 @@ type
       procedure doStarfield;
       procedure doExplosions;
       procedure doDebris;
+      procedure doPointsPods;
 
       procedure drawFighters;
       procedure drawBullets;
@@ -48,9 +59,12 @@ type
       procedure drawStarfield;
       procedure drawExplosions;
       procedure drawDebris;
+      procedure drawHud;
+      procedure drawPointsPods;
 
       procedure addExplosions(x: Double; y: Double; num: Integer);
       procedure addDebris(e: PEntity);
+      procedure addPointsPod(x, y: Double);
 
       procedure fireBullet;
       procedure spawnEnemies;
@@ -60,9 +74,6 @@ type
       function bulletHitFighter(b: PEntity): Boolean;
   end;
 
-procedure initStage;
-procedure deinitStage;
-procedure resetStage;
 procedure logic;
 procedure draw;
 
@@ -78,8 +89,11 @@ uses
   Shooter.Defs,
   Shooter.App,
   Shooter.Draw,
-  Shooter.Util;
+  Shooter.Util,
+  Shooter.Audio,
+  Shooter.Text;
 
+// ******************** var ********************
 var
   player: PEntity;
   stage: TStage;
@@ -90,34 +104,38 @@ var
   alienBulletTexture: PSDL_Texture;
   background: PSDL_Texture;
   explosionTexture: PSDL_Texture;
+  pointsTexture: PSDL_Texture;
 
   enemySpawnTimer: Integer;
   stageResetTimer: Integer;
   backgroundX: Integer;
   stars: array[0..MAX_STARS] of TStar;
 
+  highscore: Integer;
+
 // 
-constructor TStage.Create;
+constructor TStage.create;
 begin
+  inherited;
   fighterHead := createEntity^;
   bulletHead := createEntity^;
+  pointsHead := createEntity^;
   explosionHead := createExplosion^;
   debrisHead := createDebris^;
 
   fighterTail := @fighterHead;
   bulletTail := @bulletHead;
+  pointsTail := @pointsHead;
   explosionTail := @explosionHead;
   debrisTail := @debrisHead;
 
-  initPlayer;
-  initStarfield;
+  score := 0;
 end;
 
 // 
-destructor TStage.Destroy;
+destructor TStage.destroy;
 begin
-
-  inherited Destroy;
+  inherited destroy;
 end;
 
 // 
@@ -127,7 +145,7 @@ begin
   self.fighterTail^.next := player;
   self.fighterTail := player;
 
-  player^.health := true;
+  player^.health := 1;
   player^.x := 100;
   player^.y := 100;
   player^.texture := playerTexture;
@@ -162,7 +180,7 @@ begin
   bullet^.x := player^.x;
   bullet^.y := player^.y;
   bullet^.dx := PLAYER_BULLET_SPEED;
-  bullet^.health := true;
+  bullet^.health := 1;
   bullet^.texture := bulletTexture;
   bullet^.side := SIDE_PLAYER;
   SDL_QueryTexture(bullet^.texture, Nil, Nil, @bullet^.w, @bullet^.h);
@@ -195,9 +213,12 @@ begin
       player^.dx := PLAYER_SPEED;
 
     if (app.keyboard[SDL_SCANCODE_SPACE] = 1) and (player^.reload <= 0) then
+    begin
+      audio.playSound(SND_PLAYER_FIRE, CH_PLAYER);
       fireBullet;
-  end;
+    end;
 
+  end;
 end;
 
 // 
@@ -215,9 +236,9 @@ begin
     e^.y += e^.dy;
 
     if (e <> player) and (e^.x < -e^.w) then
-      e^.health := false;
+      e^.health := 0;
 
-    if not e^.health then
+    if e^.health = 0 then
     begin
       if e = player then
         player := Nil;
@@ -280,7 +301,11 @@ begin
     begin
       Dec(e^.reload);
       if e^.reload <= 0 then
+      begin
         fireAlienBullet(e);
+
+        audio.playSound(SND_ALIEN_FIRE, CH_ALIEN_FIRE);
+      end;
     end;
 
     e := e^.next;
@@ -365,6 +390,70 @@ begin
 
     prev := d;
     d := d^.next;
+  end;
+end;
+
+// 
+procedure TStage.doPointsPods;
+var
+  e: PEntity;
+  prev: PEntity;
+begin
+  prev := @stage.pointsHead;
+
+  e := stage.pointsHead.next;
+  while e <> Nil do
+  begin
+    if e^.x < 0 then
+    begin
+      e^.x := 0;
+      e^.dx := -e^.dx;
+    end;
+
+    if (e^.x + e^.w) > SCREEN_WIDTH then
+    begin
+      e^.x := SCREEN_WIDTH - e^.w;
+      e^.dx := -e^.dx;
+    end;
+
+    if e^.y < 0 then
+    begin
+      e^.y := 0;
+      e^.dy := -e^.dy;
+    end;
+
+    if (e^.y + e^.h) > SCREEN_HEIGHT then
+    begin
+      e^.y := SCREEN_HEIGHT - e^.h;
+      e^.dy := -e^.dy;
+    end;
+
+    e^.x += e^.dx;
+    e^.y += e^.dy;
+
+    if (player <> Nil) and
+    (collision(e^.x, e^.y, e^.w, e^.h, player^.x, player^.y, player^.w, player^.h)) then
+    begin
+      e^.health := 0;
+      Inc(stage.score);
+      highscore := MAX(stage.score, highscore);
+
+      audio.playSound(SND_POINTS, CH_POINTS);
+    end;
+
+    Dec(e^.health);
+    if e^.health <= 0 then
+    begin
+      if e = stage.pointsTail then
+        stage.pointsTail := prev;
+
+      prev^.next := e^.next;
+      Dispose(e);
+      e := prev;
+    end;
+    prev := e;
+
+    e := e^.next;
   end;
 end;
 
@@ -466,6 +555,31 @@ begin
 end;
 
 // 
+procedure TStage.drawHud;
+begin
+  drawText(10, 10, 255, 255, 255, Format('SCORE: %0.3d', [stage.score]));
+
+  if (stage.score > 0) and (stage.score = highscore) then
+    drawText(764, 10, 0, 255, 0, Format('HIGHSCORE: %0.3d', [highscore]))
+  else
+    drawText(764, 10, 255, 255, 255, Format('HIGHSCORE: %0.3d', [highscore]));
+end;
+
+// 
+procedure TStage.drawPointsPods;
+var
+  e: PEntity;
+begin
+  e := stage.pointsHead.next;
+  while e <> Nil do
+  begin
+    blit(e^.texture, e^.x, e^.y);
+
+    e := e^.next;
+  end;
+end;
+
+// 
 procedure TStage.addExplosions(x: Double; y: Double; num: Integer);
 var
   i: Integer;
@@ -551,6 +665,29 @@ begin
 end;
 
 // 
+procedure TStage.addPointsPod(x, y: Double);
+var
+  e: PEntity;
+begin
+  e := createEntity;
+
+  stage.pointsTail^.next := e;
+  stage.pointsTail := e;
+
+  e^.x := Trunc(x);
+  e^.y := Trunc(y);
+  e^.dx := -Random(5);
+  e^.dy := Random(5) - Random(5);
+  e^.health := FPS * 10;
+  e^.texture := pointsTexture;
+
+  SDL_QueryTexture(e^.texture, Nil, Nil, @e^.w, @e^.h);
+
+  e^.x -= e^.w Div 2;
+  e^.y -= e^.h Div 2;
+end;
+
+// 
 procedure TStage.spawnEnemies;
 var
   enemy: PEntity;
@@ -571,7 +708,7 @@ begin
     enemy^.dx := -(2 + Random(4));
 
     enemy^.side := SIDE_ALIEN;
-    enemy^.health := true;
+    enemy^.health := 1;
 
     enemy^.reload := FPS * (1 + Random(3));
 
@@ -590,7 +727,7 @@ begin
 
   bullet^.x := e^.x;
   bullet^.y := e^.y;
-  bullet^.health := true;
+  bullet^.health := 1;
   bullet^.texture := alienBulletTexture;
   bullet^.side := SIDE_ALIEN;
   SDL_QueryTexture(bullet^.texture, Nil, Nil, @bullet^.w, @bullet^.h);
@@ -641,11 +778,22 @@ begin
     if (e^.side <> b^.side) and
     (collision(b^.x, b^.y, b^.w, b^.h, e^.x, e^.y, e^.w, e^.h)) then
     begin
-      b^.health := false;
-      e^.health := false;
+      b^.health := 0;
+      e^.health := 0;
 
       addExplosions(e^.x, e^.y, 32);
       addDebris(e);
+
+      if e = player then
+        audio.playSound(SND_PLAYER_DIE, CH_PLAYER)
+      else
+      begin
+        addPointsPod(e^.x + (e^.w Div 2), e^.y + (e^.h Div 2));
+        
+        audio.playSound(SND_ALIEN_DIE, CH_ANY);
+        Inc(stage.score);
+        highscore := MAX(stage.score, highscore);
+      end;
 
       Result := true;
       Exit;
@@ -654,6 +802,63 @@ begin
   end;
 
   Result := false;
+end;
+
+// 
+procedure TStage.reset;
+var
+  e: PEntity;
+  ex: PExplosion;
+  d: PDebris;
+begin
+  while fighterHead.next <> Nil do
+  begin
+    e := fighterHead.next;
+    fighterHead.next := e^.next;
+    Dispose(e);
+  end;
+
+  while bulletHead.next <> Nil do
+  begin
+    e := bulletHead.next;
+    bulletHead.next := e^.next;
+    Dispose(e);
+  end;
+
+  while explosionHead.next <> Nil do
+  begin
+    ex := explosionHead.next;
+    explosionHead.next := ex^.next;
+    Dispose(ex);
+  end;
+
+  while debrisHead.next <> Nil do
+  begin
+    d := debrisHead.next;
+    debrisHead.next := d^.next;
+    Dispose(d);
+  end;
+
+  while pointsHead.next <> Nil do
+  begin
+    e := pointsHead.next;
+    pointsHead.next := e^.next;
+    Dispose(e);
+  end;
+
+  fighterTail := @fighterHead;
+  bulletTail := @bulletHead;
+  pointsTail := @pointsHead;
+  explosionTail := @explosionHead;
+  debrisTail := @debrisHead;
+
+  score := 0;
+
+  initPlayer;
+  initStarfield;
+
+  enemySpawnTimer := 0;
+  stageResetTimer := FPS * 2;
 end;
 
 // 
@@ -667,6 +872,7 @@ begin
   stage.doBullets;
   stage.doExplosions;
   stage.doDebris;
+  stage.doPointsPods;
   stage.spawnEnemies;
   stage.clipPlayer;
 
@@ -674,7 +880,7 @@ begin
   begin
     Dec(stageResetTimer);
     if stageResetTimer <= 0 then
-      resetStage;
+      stage.reset;
   end;
 
 end;
@@ -684,69 +890,25 @@ procedure draw;
 begin
   stage.drawBackground;
   stage.drawStarfield;
+  stage.drawPointsPods;
   stage.drawFighters;
   stage.drawDebris;
   stage.drawExplosions;
   stage.drawBullets;
+  stage.drawHud;
 end;
 
 // 
-procedure resetStage;
-var
-  e: PEntity;
-  ex: PExplosion;
-  d: PDebris;
+class procedure TStage.destroyAndNil;
 begin
-  while stage.fighterHead.next <> Nil do
-  begin
-    e := stage.fighterHead.next;
-    stage.fighterHead.next := e^.next;
-    Dispose(e);
-  end;
-
-  while stage.bulletHead.next <> Nil do
-  begin
-    e := stage.bulletHead.next;
-    stage.bulletHead.next := e^.next;
-    Dispose(e);
-  end;
-
-  while stage.explosionHead.next <> Nil do
-  begin
-    ex := stage.explosionHead.next;
-    stage.explosionHead.next := ex^.next;
-    Dispose(ex);
-  end;
-
-  while stage.debrisHead.next <> Nil do
-  begin
-    d := stage.debrisHead.next;
-    stage.debrisHead.next := d^.next;
-    Dispose(d);
-  end;
-
-  stage.fighterTail := @stage.fighterHead;
-  stage.bulletTail := @stage.bulletHead;
-  stage.explosionTail := @stage.explosionHead;
-  stage.debrisTail := @stage.debrisHead;
-
-  stage.initPlayer;
-  stage.initStarfield;
-
-  enemySpawnTimer := 0;
-  stageResetTimer := FPS * 2;
+  stage.destroy;
 end;
 
 // 
-procedure deinitStage;
+class procedure TStage.createAndInit;
 begin
-  
-  stage.Destroy;
-end;
+  stage := TStage.create;
 
-// 
-procedure initStage;
-begin
   app.delegate.logic := @logic;
   app.delegate.draw := @draw;
 
@@ -756,8 +918,12 @@ begin
   alienBulletTexture := loadTexture(('gfx/alienBullet.png'));
   background := loadTexture('gfx/background.png');
   explosionTexture := loadTexture('gfx/explosion.png');
+  pointsTexture := loadTexture('gfx/points.png');
 
-  stage := TStage.Create;
+  audio.playMusic(1);
+
+  stage.initPlayer;
+  stage.initStarfield;
 
   enemySpawnTimer := 0;
   stageResetTimer := FPS * 2;

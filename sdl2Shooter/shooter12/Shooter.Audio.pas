@@ -29,9 +29,6 @@ type
       procedure playMusic(loop: Integer);
       procedure playSound(id, channel: Integer);
 
-      class procedure createAndInit;
-      class procedure destroyAndNil;
-
     private
       procedure loadMusic;
       procedure loadSounds;
@@ -40,6 +37,9 @@ type
 // ******************** var ********************
 var
   audio: TAudio;
+
+  procedure createAudioAndInit;
+  procedure destroyAudioAndNil;
 
 // ******************** implementation ********************
 implementation
@@ -100,7 +100,7 @@ begin
 end;
 
 // 
-class procedure TAudio.createAndInit;
+procedure createAudioAndInit;
 begin
   audio := TAudio.Create;
   
@@ -109,7 +109,7 @@ begin
 end;
 
 // 
-class procedure TAudio.destroyAndNil;
+procedure destroyAudioAndNil;
 begin
   audio.destroy;
 end;

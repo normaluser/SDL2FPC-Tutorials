@@ -20,8 +20,8 @@ uses
 // 
 procedure atExit;
 begin
-  TAudio.destroyAndNil;
-  TStage.destroyAndNil;
+  destroyAudioAndNil;
+  destroyStageAndNil;
   
   SDL_DestroyRenderer(app.renderer);
   SDL_DestroyWindow(app.window);
@@ -61,9 +61,9 @@ begin
 
   AddExitProc(@atExit);
 
-  TAudio.createAndInit;
+  createAudioAndInit;
 
-  TStage.createAndInit;
+  createStageAndInit;
 
   then_ := SDL_GetTicks;
   remainder := 0;

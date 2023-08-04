@@ -30,9 +30,6 @@ type
       constructor create;
       destructor destroy; override;
 
-      class procedure createAndInit;
-      class procedure destroyAndNil;
-
     private
       procedure initPlayer;
       procedure initStarfield;
@@ -68,6 +65,9 @@ type
 
 procedure logic;
 procedure draw;
+
+procedure createStageAndInit;
+procedure destroyStageAndNil;
 
 // ******************** implementation ********************
 implementation
@@ -278,7 +278,7 @@ procedure TStage.doEnemies;
 var
   e: PEntity;
 begin
-  e := stage.fighterHead.next;
+  e := fighterHead.next;
   while e <> Nil do
   begin
     if (e <> player) and (player <> Nil) then
@@ -322,8 +322,8 @@ var
   e: PExplosion;
   prev: PExplosion;
 begin
-  prev := @stage.explosionHead;
-  e := stage.explosionHead.next;
+  prev := @explosionHead;
+  e := explosionHead.next;
   while e <> Nil do
   begin
     e^.x += e^.dx;
@@ -332,8 +332,8 @@ begin
     Dec(e^.a);
     if e^.a <= 0 then
     begin
-      if e = stage.explosionTail then
-        stage.explosionTail := prev;
+      if e = explosionTail then
+        explosionTail := prev;
 
       prev^.next := e^.next;
       Dispose(e);
@@ -351,8 +351,8 @@ var
   d: PDebris;
   prev: PDebris;
 begin
-  prev := @stage.debrisHead;
-  d := stage.debrisHead.next;
+  prev := @debrisHead;
+  d := debrisHead.next;
   while d <> Nil do
   begin
     d^.x += d^.dx;
@@ -363,8 +363,8 @@ begin
     Dec(d^.life);
     if d^.life <= 0 then
     begin
-      if d = stage.debrisTail then
-        stage.debrisTail := prev;
+      if d = debrisTail then
+        debrisTail := prev;
 
       prev^.next := d^.next;
       Dispose(d);
@@ -445,7 +445,7 @@ begin
   SDL_SetRenderDrawBlendMode(app.renderer, SDL_BLENDMODE_ADD);
   SDL_SetTextureBlendMode(explosionTexture, SDL_BLENDMODE_ADD);
 
-  e := stage.explosionHead.next;
+  e := explosionHead.next;
   while e <> Nil do
   begin
     SDL_SetTextureColorMod(explosionTexture, e^.r, e^.g, e^.b);
@@ -464,7 +464,7 @@ procedure TStage.drawDebris;
 var
   d: PDebris;
 begin
-  d := stage.debrisHead.next;
+  d := debrisHead.next;
   while d <> Nil do
   begin
     blitRect(d^.texture, @d^.rect, d^.x, d^.y);
@@ -482,8 +482,8 @@ begin
   for i := 0 to (num - 1) do
   begin
     e := createExplosion;
-    stage.explosionTail^.next := e;
-    stage.explosionTail := e;
+    explosionTail^.next := e;
+    explosionTail := e;
 
     e^.x := Trunc(x) + Random(32) - Random(32);
     e^.y := Trunc(y) + Random(32) - Random(32);
@@ -536,8 +536,8 @@ begin
     while x <= w do
     begin
       d := createDebris;
-      stage.debrisTail^.next := d;
-      stage.debrisTail := d;
+      debrisTail^.next := d;
+      debrisTail := d;
 
       d^.x := e^.x + (e^.w Div 2);
       d^.y := e^.y + (e^.h Div 2);
@@ -593,8 +593,8 @@ var
   bullet : PEntity;
 begin
   bullet := createEntity;
-  stage.bulletTail^.next := bullet;
-  stage.bulletTail := bullet;
+  bulletTail^.next := bullet;
+  bulletTail := bullet;
 
   bullet^.x := e^.x;
   bullet^.y := e^.y;
@@ -751,13 +751,7 @@ begin
 end;
 
 // 
-class procedure TStage.destroyAndNil;
-begin
-  stage.destroy;
-end;
-
-// 
-class procedure TStage.createAndInit;
+procedure createStageAndInit;
 begin
   stage := TStage.create;
 
@@ -778,6 +772,12 @@ begin
 
   enemySpawnTimer := 0;
   stageResetTimer := FPS * 2;
+end;
+
+// 
+procedure destroyStageAndNil;
+begin
+  stage.destroy;
 end;
 
 end.

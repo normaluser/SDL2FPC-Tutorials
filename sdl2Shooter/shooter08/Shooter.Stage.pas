@@ -40,11 +40,12 @@ type
       function bulletHitFighter(b: PEntity): Boolean;
   end;
 
-procedure initStage;
-procedure deinitStage;
-procedure resetStage;
 procedure logic;
 procedure draw;
+
+procedure createStageAndInit;
+procedure destroyStageAndNil;
+procedure resetStage;
 
 // ******************** implementation ********************
 implementation
@@ -231,7 +232,7 @@ procedure TStage.doEnemies;
 var
   e: PEntity;
 begin
-  e := stage.fighterHead.next;
+  e := fighterHead.next;
   while e <> Nil do 
   begin
     if (e <> player) and (player <> Nil) then
@@ -306,8 +307,8 @@ var
   bullet : PEntity;
 begin
   bullet := createEntity;
-  stage.bulletTail^.next := bullet;
-  stage.bulletTail := bullet;
+  bulletTail^.next := bullet;
+  bulletTail := bullet;
 
   bullet^.x := e^.x;
   bullet^.y := e^.y;
@@ -429,14 +430,7 @@ begin
 end;
 
 // 
-procedure deinitStage;
-begin
-  
-  stage.Destroy;
-end;
-
-// 
-procedure initStage;
+procedure createStageAndInit;
 begin
   app.delegate.logic := @logic;
   app.delegate.draw := @draw;
@@ -450,6 +444,12 @@ begin
 
   enemySpawnTimer := 0;
   stageResetTimer := FPS * 2;
+end;
+
+// 
+procedure destroyStageAndNil;
+begin
+  stage.Destroy;
 end;
 
 end.

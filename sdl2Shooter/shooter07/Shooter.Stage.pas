@@ -21,8 +21,8 @@ type
       fighterTail: PEntity;
       bulletTail: PEntity;
 
-      constructor Create;
-      destructor Destroy; override;
+      constructor create;
+      destructor destroy; override;
 
     private
       procedure initPlayer;
@@ -37,10 +37,11 @@ type
       function bulletHitFighter(b: PEntity): Boolean;
   end;
 
-procedure initStage;
-procedure deinitStage;
 procedure logic;
 procedure draw;
+
+procedure createStageAndInit;
+procedure destroyStageAndNil;
 
 // ******************** implementation ********************
 implementation
@@ -65,7 +66,7 @@ var
   enemySpawnTimer: Integer;
 
 // 
-constructor TStage.Create;
+constructor TStage.create;
 begin
   fighterHead := createEntity^;
   bulletHead := createEntity^;
@@ -77,10 +78,10 @@ begin
 end;
 
 // 
-destructor TStage.Destroy;
+destructor TStage.destroy;
 begin
 
-  inherited Destroy;
+  inherited destroy;
 end;
 
 // 
@@ -300,7 +301,7 @@ begin
 end;
 
 // 
-procedure initStage;
+procedure createStageAndInit;
 begin
   app.delegate.logic := @logic;
   app.delegate.draw := @draw;
@@ -309,16 +310,15 @@ begin
   enemyTexture := loadTexture('gfx/enemy.png');
   bulletTexture := loadTexture('gfx/playerBullet.png');
 
-  stage := TStage.Create;
+  stage := TStage.create;
 
   enemySpawnTimer := 0;
 end;
 
 // 
-procedure deinitStage;
+procedure destroyStageAndNil;
 begin
-  
-  stage.Destroy;
+  stage.destroy;
 end;
 
 end.

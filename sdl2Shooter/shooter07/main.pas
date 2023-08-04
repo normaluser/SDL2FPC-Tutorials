@@ -19,7 +19,7 @@ uses
 // 
 procedure atExit;
 begin
-  deinitStage;
+  destroyStageAndNil;
   
   SDL_DestroyRenderer(app.renderer);
   SDL_DestroyWindow(app.window);
@@ -59,7 +59,7 @@ begin
 
   AddExitProc(@atExit);
 
-  initStage;
+  createStageAndInit;
 
   then_ := SDL_GetTicks;
   remainder := 0;

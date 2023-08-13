@@ -11,11 +11,12 @@ interface
 
 uses
   {shooter}
+  Shooter.App,
   Shooter.Structs;
 
 // ******************** type ********************
 type
-  TStage = class(TObject)
+  TStage = class(TInterfacedObject, IApp)
     public
       fighterHead: TEntity;
       bulletHead: TEntity;
@@ -69,17 +70,16 @@ type
       procedure clipPlayer;
       
       function bulletHitFighter(b: PEntity): Boolean;
+
+      procedure logic;
+      procedure draw;
   end;
 
 // ******************** var ********************
 var
   stage: TStage;
 
-procedure logic;
-procedure draw;
-
-procedure createStageAndInit;
-procedure destroyStageAndNil;
+procedure initStage;
 
 // ******************** implementation ********************
 implementation
@@ -91,7 +91,6 @@ uses
   sdl2,
   {shooter}
   Shooter.Defs,
-  Shooter.App,
   Shooter.Draw,
   Shooter.Util,
   Shooter.Audio,
@@ -865,49 +864,45 @@ begin
 end;
 
 // 
-procedure logic;
+procedure TStage.logic;
 begin
-  stage.doBackground;
-  stage.doStarfield;
-  stage.doPlayer;
-  stage.doEnemies;
-  stage.doFighters;
-  stage.doBullets;
-  stage.doExplosions;
-  stage.doDebris;
-  stage.doPointsPods;
-  stage.spawnEnemies;
-  stage.clipPlayer;
+  doBackground;
+  doStarfield;
+  doPlayer;
+  doEnemies;
+  doFighters;
+  doBullets;
+  doExplosions;
+  doDebris;
+  doPointsPods;
+  spawnEnemies;
+  clipPlayer;
 
   if player = Nil then
   begin
     Dec(stageResetTimer);
     if stageResetTimer <= 0 then
-      stage.reset;
+      reset;
   end;
-
 end;
 
 // 
-procedure draw;
+procedure TStage.draw;
 begin
-  stage.drawBackground;
-  stage.drawStarfield;
-  stage.drawPointsPods;
-  stage.drawFighters;
-  stage.drawDebris;
-  stage.drawExplosions;
-  stage.drawBullets;
-  stage.drawHud;
+  drawBackground;
+  drawStarfield;
+  drawPointsPods;
+  drawFighters;
+  drawDebris;
+  drawExplosions;
+  drawBullets;
+  drawHud;
 end;
 
 // 
-procedure createStageAndInit;
+procedure initStage;
 begin
   stage := TStage.create;
-
-  app.delegate.logic := @logic;
-  app.delegate.draw := @draw;
 
   playerTexture := loadTexture('gfx/player.png');
   enemyTexture := loadTexture('gfx/enemy.png');
@@ -917,19 +912,11 @@ begin
   explosionTexture := loadTexture('gfx/explosion.png');
   pointsTexture := loadTexture('gfx/points.png');
 
-  audio.playMusic(1);
-
   stage.initPlayer;
   stage.initStarfield;
 
   enemySpawnTimer := 0;
   stageResetTimer := FPS * 2;
-end;
-
-// 
-procedure destroyStageAndNil;
-begin
-  stage.destroy;
 end;
 
 end.

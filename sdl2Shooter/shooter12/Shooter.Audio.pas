@@ -38,8 +38,7 @@ type
 var
   audio: TAudio;
 
-  procedure createAudioAndInit;
-  procedure destroyAudioAndNil;
+  procedure initAudio;
 
 // ******************** implementation ********************
 implementation
@@ -100,18 +99,12 @@ begin
 end;
 
 // 
-procedure createAudioAndInit;
+procedure initAudio;
 begin
   audio := TAudio.Create;
   
   audio.loadMusic;
   audio.loadSounds;
-end;
-
-// 
-procedure destroyAudioAndNil;
-begin
-  audio.destroy;
 end;
 
 end.

@@ -75,9 +75,9 @@ begin
 
     doInput;
 
-    app.logic(stage as IApp);
+    app.logic(stage as ILogicAndRender);
 
-    app.draw(stage as IApp);
+    app.draw(stage as ILogicAndRender);
 
     presentScene;
 

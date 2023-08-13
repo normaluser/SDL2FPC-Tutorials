@@ -17,8 +17,8 @@ uses
 
 // ******************** type ********************
 type
-  IApp = interface
-    ['{C27D12B2-44F3-4CAA-BF5C-B123456789AB}']
+  ILogicAndRender = interface
+    ['{2EC79BCE-AC61-4E51-B187-1C5C9850ED0C}']
     procedure logic;
     procedure draw;
   end;
@@ -31,8 +31,8 @@ type
     constructor create;
     destructor destroy; override;
 
-    procedure logic(i: IApp);
-    procedure draw(i: IApp);
+    procedure logic(i: ILogicAndRender);
+    procedure draw(i: ILogicAndRender);
   end;
 
 // ******************** var ********************
@@ -123,14 +123,14 @@ begin
 end;
 
 // 
-procedure TApp.logic(i: IApp);
+procedure TApp.logic(i: ILogicAndRender);
 begin
   if Assigned(i) then
     i.logic;
 end;
 
 // 
-procedure TApp.draw(i: IApp);
+procedure TApp.draw(i: ILogicAndRender);
 begin
   if Assigned(i) then
     i.draw;

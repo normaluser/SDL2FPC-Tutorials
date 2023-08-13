@@ -16,7 +16,7 @@ uses
 
 // ******************** type ********************
 type
-  TStage = class(TInterfacedObject, IApp)
+  TStage = class(TInterfacedObject, ILogicAndRender)
     public
       fighterHead: TEntity;
       bulletHead: TEntity;

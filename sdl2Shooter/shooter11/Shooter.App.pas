@@ -10,85 +10,135 @@ unit Shooter.App;
 interface
 
 uses
+  {sdl2}
+  sdl2,
   {shooter}
-  Shooter.Structs;
+  Shooter.Defs;
+
+// ******************** type ********************
+type
+  ILogicAndRender = interface
+    ['{2EC79BCE-AC61-4E51-B187-1C5C9850ED0C}']
+    procedure logic;
+    procedure draw;
+  end;
+
+  TApp = class(TObject)
+    renderer: PSDL_Renderer;
+    window: PSDL_Window;
+    keyboard: array[0..MAX_KEYBOARD_KEYS] of Integer;
+
+    constructor create;
+    destructor destroy; override;
+
+    procedure logic(i: ILogicAndRender);
+    procedure draw(i: ILogicAndRender);
+  end;
 
 // ******************** var ********************
 var
   app: TApp;
 
-function createEntity: PEntity;
-function createExplosion: PExplosion;
-function createDebris: PDebris;
+procedure initApp;
 
 // ******************** implementation ********************
 implementation
 
+uses
+  {rtl}
+  sysutils,
+  {sdl2}
+  sdl2_image,
+  sdl2_mixer;
+
 // 
-function createEntity: PEntity;
+constructor TApp.create;
 var
-  e: PEntity;
+  i: Integer;
+  rendererFlags: Integer;
+  windowFlags: Integer;
 begin
-  New(e);
-  with e^ do
+  inherited;
+
+  // keyboard init
+  for i := 0 to MAX_KEYBOARD_KEYS do
+    keyboard[i] := 0;
+
+  rendererFlags := SDL_RENDERER_ACCELERATED;
+  windowFlags := 0;
+
+  if SDL_Init(SDL_INIT_VIDEO) < 0 then
   begin
-    x := 0.0;
-    y := 0.0;
-    dx := 0.0;
-    dy := 0.0;
-    h := 0;
-    w := 0;
-    health := false;
-    reload := 0;
-    side := 0;
-    Texture := Nil;
-    next := Nil;
+    WriteLn(Format('Couldn''t initialize SDL: %s', [SDL_GetError()]));
+    Halt(1);
   end;
-  Result := e;
+
+  if Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) = -1 then
+  begin
+    WriteLn('Couldn''t initialize SDL Mixer');
+    Halt(1);
+  end;
+
+  Mix_AllocateChannels(MAX_SND_CHANNELS);
+
+  // window init
+  window := SDL_CreateWindow('Shooter',
+                                  SDL_WINDOWPOS_UNDEFINED,
+                                  SDL_WINDOWPOS_UNDEFINED,
+                                  SCREEN_WIDTH,
+                                  SCREEN_HEIGHT,
+                                  windowFlags);
+  if window = NIL then
+  begin
+    WriteLn(Format('Failed to open %d x %d window: %s', [SCREEN_WIDTH, SCREEN_WIDTH, SDL_GetError()]));
+    Halt(1);
+  end;
+
+  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 'linear');
+  // renderer init
+  renderer := SDL_CreateRenderer(window, -1, rendererFlags);
+
+  if renderer = NIL then
+  begin
+    WriteLn(Format('Failed to create renderer: %s', [SDL_GetError()]));
+    Halt(1);
+  end;
+
+  IMG_Init(IMG_INIT_PNG or IMG_INIT_JPG);
 end;
 
 // 
-function createExplosion: PExplosion;
-var
-  e: PExplosion;
+destructor TApp.destroy;
 begin
-  New(e);
-  with e^ do
-  begin
-    x := 0.0;
-    y := 0.0;
-    dx := 0.0;
-    dy := 0.0;
-    r := 0;
-    g := 0;
-    b := 0;
-    a := 0;
-    next := Nil;
-  end;
-  Result := e;
+  Mix_Quit;
+
+  IMG_Quit;
+
+  SDL_DestroyRenderer(renderer);
+
+  SDL_DestroyWindow(window);
+
+  SDL_Quit;
+  inherited destroy;
 end;
 
 // 
-function createDebris: PDebris;
-var
-  e: PDebris;
+procedure TApp.logic(i: ILogicAndRender);
 begin
-  New(e);
-  with e^ do
-  begin
-    x := 0.0;
-    y := 0.0;
-    dx := 0.0;
-    dy := 0.0;
-    rect.x := 0;
-    rect.y := 0;
-    rect.w := 0;
-    rect.h := 0;
-    texture := nil;
-    life := 0;
-    next := Nil;
-  end;
-  Result := e;
+  if Assigned(i) then
+    i.logic;
+end;
+
+// 
+procedure TApp.draw(i: ILogicAndRender);
+begin
+  if Assigned(i) then
+    i.draw;
+end;
+
+procedure initApp;
+begin
+  app := TApp.create;
 end;
 
 end.

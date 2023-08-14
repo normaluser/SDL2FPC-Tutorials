@@ -11,9 +11,7 @@ interface
 
 uses
   {sdl2}
-  sdl2,
-  {shooter}
-  Shooter.Defs;
+  sdl2;
 
 procedure initFonts;
 procedure drawText(x, y: Integer; r, g, b: Integer; outText: String);

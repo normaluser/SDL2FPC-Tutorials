@@ -71,6 +71,7 @@ type
       
       function bulletHitFighter(b: PEntity): Boolean;
 
+      // ILogicAndRender
       procedure logic;
       procedure draw;
   end;

@@ -11,11 +11,12 @@ interface
 
 uses
   {shooter}
+  Shooter.App,
   Shooter.Structs;
 
 // ******************** type ********************
 type
-  TStage = class(TObject)
+  TStage = class(TInterfacedObject, ILogicAndRender)
     public
       fighterHead: TEntity;
       bulletHead: TEntity;
@@ -61,13 +62,17 @@ type
       procedure clipPlayer;
       
       function bulletHitFighter(b: PEntity): Boolean;
+
+      // ILogicAndRender
+      procedure logic;
+      procedure draw;
   end;
 
-procedure logic;
-procedure draw;
+// ******************** var ********************
+var
+  stage: TStage;
 
-procedure createStageAndInit;
-procedure destroyStageAndNil;
+procedure initStage;
 
 // ******************** implementation ********************
 implementation
@@ -79,7 +84,6 @@ uses
   sdl2,
   {shooter}
   Shooter.Defs,
-  Shooter.App,
   Shooter.Draw,
   Shooter.Util,
   Shooter.Audio;
@@ -87,7 +91,6 @@ uses
 // ******************** var ********************
 var
   player: PEntity;
-  stage: TStage;
 
   playerTexture: PSDL_Texture;
   enemyTexture: PSDL_Texture;
@@ -129,7 +132,7 @@ begin
   self.fighterTail^.next := player;
   self.fighterTail := player;
 
-  player^.health := true;
+  player^.health := 1;
   player^.x := 100;
   player^.y := 100;
   player^.texture := playerTexture;
@@ -164,7 +167,7 @@ begin
   bullet^.x := player^.x;
   bullet^.y := player^.y;
   bullet^.dx := PLAYER_BULLET_SPEED;
-  bullet^.health := true;
+  bullet^.health := 1;
   bullet^.texture := bulletTexture;
   bullet^.side := SIDE_PLAYER;
   SDL_QueryTexture(bullet^.texture, Nil, Nil, @bullet^.w, @bullet^.h);
@@ -220,9 +223,9 @@ begin
     e^.y += e^.dy;
 
     if (e <> player) and (e^.x < -e^.w) then
-      e^.health := false;
+      e^.health := 0;
 
-    if not e^.health then
+    if e^.health = 0 then
     begin
       if e = player then
         player := Nil;
@@ -579,7 +582,7 @@ begin
     enemy^.dx := -(2 + Random(4));
 
     enemy^.side := SIDE_ALIEN;
-    enemy^.health := true;
+    enemy^.health := 1;
 
     enemy^.reload := FPS * (1 + Random(3));
 
@@ -598,7 +601,7 @@ begin
 
   bullet^.x := e^.x;
   bullet^.y := e^.y;
-  bullet^.health := true;
+  bullet^.health := 1;
   bullet^.texture := alienBulletTexture;
   bullet^.side := SIDE_ALIEN;
   SDL_QueryTexture(bullet^.texture, Nil, Nil, @bullet^.w, @bullet^.h);
@@ -649,8 +652,8 @@ begin
     if (e^.side <> b^.side) and
     (collision(b^.x, b^.y, b^.w, b^.h, e^.x, e^.y, e^.w, e^.h)) then
     begin
-      b^.health := false;
-      e^.health := false;
+      b^.health := 0;
+      e^.health := 0;
 
       addExplosions(e^.x, e^.y, 32);
       addDebris(e);
@@ -717,46 +720,43 @@ begin
 end;
 
 // 
-procedure logic;
+procedure TStage.logic;
 begin
-  stage.doBackground;
-  stage.doStarfield;
-  stage.doPlayer;
-  stage.doEnemies;
-  stage.doFighters;
-  stage.doBullets;
-  stage.doExplosions;
-  stage.doDebris;
-  stage.spawnEnemies;
-  stage.clipPlayer;
+  doBackground;
+  doStarfield;
+  doPlayer;
+  doEnemies;
+  doFighters;
+  doBullets;
+  doExplosions;
+  doDebris;
+  spawnEnemies;
+  clipPlayer;
 
   if player = Nil then
   begin
     Dec(stageResetTimer);
     if stageResetTimer <= 0 then
-      stage.reset;
+      reset;
   end;
 
 end;
 
 // 
-procedure draw;
+procedure TStage.draw;
 begin
-  stage.drawBackground;
-  stage.drawStarfield;
-  stage.drawFighters;
-  stage.drawDebris;
-  stage.drawExplosions;
-  stage.drawBullets;
+  drawBackground;
+  drawStarfield;
+  drawFighters;
+  drawDebris;
+  drawExplosions;
+  drawBullets;
 end;
 
 // 
-procedure createStageAndInit;
+procedure initStage;
 begin
   stage := TStage.create;
-
-  app.delegate.logic := @logic;
-  app.delegate.draw := @draw;
 
   playerTexture := loadTexture('gfx/player.png');
   enemyTexture := loadTexture('gfx/enemy.png');
@@ -765,19 +765,11 @@ begin
   background := loadTexture('gfx/background.png');
   explosionTexture := loadTexture('gfx/explosion.png');
 
-  audio.playMusic(1);
-
   stage.initPlayer;
   stage.initStarfield;
 
   enemySpawnTimer := 0;
   stageResetTimer := FPS * 2;
-end;
-
-// 
-procedure destroyStageAndNil;
-begin
-  stage.destroy;
 end;
 
 end.

@@ -11,7 +11,6 @@ uses
   sdl2,
   {shooter}
   Shooter.App,
-  Shooter.Init,
   Shooter.Draw,
   Shooter.Input,
   Shooter.Stage,
@@ -20,12 +19,8 @@ uses
 // 
 procedure atExit;
 begin
-  destroyAudioAndNil;
-  destroyStageAndNil;
-  
-  SDL_DestroyRenderer(app.renderer);
-  SDL_DestroyWindow(app.window);
-  SDL_Quit;
+  audio.destroy;
+  app.destroy;
 
   if ExitCode <> 0 then
     WriteLn(SDL_GetError)
@@ -57,13 +52,15 @@ var
   then_: Integer;
   remainder: Double;
 begin
-  initSDL;
+  initApp;
+
+  initAudio;
+
+  initStage;
+
+  audio.playMusic(1);
 
   AddExitProc(@atExit);
-
-  createAudioAndInit;
-
-  createStageAndInit;
 
   then_ := SDL_GetTicks;
   remainder := 0;
@@ -71,13 +68,15 @@ begin
   while true do
   begin
     prepareScene;
+
     doInput;
 
-    app.delegate.logic;
+    app.logic(stage as ILogicAndRender);
 
-    app.delegate.draw;
+    app.draw(stage as ILogicAndRender);
 
     presentScene;
+    
     capFrameRate(then_, remainder);
   end;
 

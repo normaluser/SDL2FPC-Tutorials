@@ -11,10 +11,11 @@ interface
 
 uses
   {shooter}
+  Shooter.App,
   Shooter.Structs;
 
 type
-  TStage = class(TObject)
+  TStage = class(TInterfacedObject, ILogicAndRender)
     public
       fighterHead: TEntity;
       bulletHead: TEntity;
@@ -35,13 +36,17 @@ type
       procedure spawnEnemies;
       
       function bulletHitFighter(b: PEntity): Boolean;
+
+      // ILogicAndRender
+      procedure logic;
+      procedure draw;
   end;
 
-procedure logic;
-procedure draw;
+// ******************** var ********************
+var
+  stage: TStage;
 
-procedure createStageAndInit;
-procedure destroyStageAndNil;
+procedure initStage;
 
 // ******************** implementation ********************
 implementation
@@ -51,13 +56,11 @@ uses
   sdl2,
   {shooter}
   Shooter.Defs,
-  Shooter.App,
   Shooter.Draw,
   Shooter.Util;
 
 var
   player: TEntity;
-  stage: TStage;
 
   fighterTexture: PSDL_Texture;
   enemyTexture: PSDL_Texture;
@@ -73,8 +76,6 @@ begin
 
   fighterTail := @fighterHead;
   bulletTail := @bulletHead;
-
-  initPlayer;
 end;
 
 // 
@@ -167,7 +168,7 @@ begin
         self.fighterTail := prev;
 
       prev^.next := e^.next;
-      disposeEntity(e);
+      Dispose(e);
       e := prev;
     end;
 
@@ -199,7 +200,7 @@ begin
 
       prev^.next := b^.next;
       
-      disposeEntity(b);
+      Dispose(b);
       b := prev;
     end;
 
@@ -285,40 +286,33 @@ begin
 end;
 
 // 
-procedure logic;
+procedure TStage.logic;
 begin
-  stage.doPlayer;
-  stage.doFighters;
-  stage.doBullets;
-  stage.spawnEnemies;
+  doPlayer;
+  doFighters;
+  doBullets;
+  spawnEnemies;
 end;
 
 // 
-procedure draw;
+procedure TStage.draw;
 begin
-  stage.drawFighters;
-  stage.drawBullets;
+  drawFighters;
+  drawBullets;
 end;
 
 // 
-procedure createStageAndInit;
+procedure initStage;
 begin
-  app.delegate.logic := @logic;
-  app.delegate.draw := @draw;
+  stage := TStage.create;
 
   fighterTexture := loadTexture('gfx/player.png');
   enemyTexture := loadTexture('gfx/enemy.png');
   bulletTexture := loadTexture('gfx/playerBullet.png');
 
-  stage := TStage.create;
+  stage.initPlayer;
 
   enemySpawnTimer := 0;
-end;
-
-// 
-procedure destroyStageAndNil;
-begin
-  stage.destroy;
 end;
 
 end.

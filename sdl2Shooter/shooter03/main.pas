@@ -11,7 +11,6 @@ uses
   sdl2,
   {shooter}
   Shooter.App,
-  Shooter.Init,
   Shooter.Draw,
   Shooter.Input;
 

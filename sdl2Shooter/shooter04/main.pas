@@ -12,7 +12,6 @@ uses
   {shooter}
   Shooter.Defs,
   Shooter.App,
-  Shooter.Init,
   Shooter.Draw,
   Shooter.Input;
 

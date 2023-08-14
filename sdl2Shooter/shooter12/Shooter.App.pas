@@ -95,9 +95,9 @@ begin
   end;
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 'linear');
+
   // renderer init
   renderer := SDL_CreateRenderer(window, -1, rendererFlags);
-
   if renderer = NIL then
   begin
     WriteLn(Format('Failed to create renderer: %s', [SDL_GetError()]));

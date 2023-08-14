@@ -86,7 +86,7 @@ begin
   end;
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 'linear');
-  
+
   // renderer init
   renderer := SDL_CreateRenderer(window, -1, rendererFlags);
   if renderer = NIL then

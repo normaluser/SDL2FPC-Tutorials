@@ -11,23 +11,9 @@ interface
 
 uses
   {sdl2}
-  sdl2,
-  {shooter}
-  Shooter.Defs;
+  sdl2;
 
 type
-  TDelegate = record
-    logic: procedure;
-    draw: procedure;
-  end;
-
-  TApp = record
-    renderer: PSDL_Renderer;
-    window: PSDL_Window;
-    delegate: TDelegate;
-    keyboard: array[0..MAX_KEYBOARD_KEYS] of Integer;
-  end;
-
   PEntity = ^TEntity;
   TEntity = record
     x: Double;
@@ -42,15 +28,31 @@ type
     next: PEntity;
   end;
 
-  TStage = record
-    fighterHead: TEntity;
-    bulletHead: TEntity;
-
-    fighterTail: PEntity;
-    bulletTail: PEntity;
-  end;
+function createEntity: PEntity;
 
 // ******************** implementation ********************
 implementation
+
+// 
+function createEntity: PEntity;
+var
+  e: PEntity;
+begin
+  New(e);
+  with e^ do
+  begin
+    x := 0.0;
+    y := 0.0;
+    dx := 0.0;
+    dy := 0.0;
+    h := 0;
+    w := 0;
+    health := false;
+    reload := 0;
+    Texture := Nil;
+    next := Nil;
+  end;
+  Result := e;
+end;
 
 end.

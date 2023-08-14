@@ -9,6 +9,32 @@ unit Shooter.Stage;
 // ******************** interface ********************
 interface
 
+uses
+  {shooter}
+  Shooter.App,
+  Shooter.Structs;
+
+type
+  TStage = class(TInterfacedObject, ILogicAndRender)
+    public
+      fighterHead: TEntity;
+      bulletHead: TEntity;
+      fighterTail: PEntity;
+      bulletTail: PEntity;
+
+      constructor create;
+      destructor destroy; override;
+
+    private
+      // ILogicAndRender
+      procedure logic;
+      procedure draw;
+  end;
+
+// ******************** var ********************
+var
+  stage: TStage;
+
 procedure initStage;
 
 // ******************** implementation ********************
@@ -19,19 +45,33 @@ uses
   sdl2,
   {shooter}
   Shooter.Defs,
-  Shooter.Structs,
-  Shooter.App,
   Shooter.Draw;
 
 var
   player: TEntity;
-  stage: TStage;
 
   fighterTexture: PSDL_Texture;
   enemyTexture: PSDL_Texture;
   bulletTexture: PSDL_Texture;
 
   enemySpawnTimer: Integer;
+
+// 
+constructor TStage.create;
+begin
+  fighterHead := createEntity^;
+  bulletHead := createEntity^;
+
+  fighterTail := @fighterHead;
+  bulletTail := @bulletHead;
+end;
+
+// 
+destructor TStage.destroy;
+begin
+
+  inherited destroy;
+end;
 
 // 
 procedure fireBullet;
@@ -101,7 +141,7 @@ begin
         stage.fighterTail := prev;
 
       prev^.next := e^.next;
-      disposeEntity(e);
+      Dispose(e);
       e := prev;
     end;
 
@@ -131,7 +171,7 @@ begin
 
       prev^.next := b^.next;
       
-      disposeEntity(b);
+      Dispose(b);
       b := prev;
     end;
 
@@ -190,7 +230,7 @@ begin
 end;
 
 // 
-procedure logic;
+procedure TStage.logic;
 begin
   doPlayer;
   doFighters;
@@ -199,7 +239,7 @@ begin
 end;
 
 // 
-procedure draw;
+procedure TStage.draw;
 begin
   drawFighters;
   drawBullets;
@@ -220,14 +260,7 @@ end;
 // 
 procedure initStage;
 begin
-  app.delegate.logic := @logic;
-  app.delegate.draw := @draw;
-
-  stage.fighterHead := createEntity^;
-  stage.bulletHead := createEntity^;
-
-  stage.fighterTail := @stage.fighterHead;
-  stage.bulletTail := @stage.bulletHead;
+  stage := TStage.create;
 
   fighterTexture := loadTexture('gfx/player.png');
   enemyTexture := loadTexture('gfx/enemy.png');

@@ -11,21 +11,23 @@ interface
 
 uses
   {shooter}
+  Shooter.App,
   Shooter.Structs;
 
 type
-  TStage = class(TObject)
+  TStage = class(TInterfacedObject, ILogicAndRender)
     public
       fighterHead: TEntity;
       bulletHead: TEntity;
       fighterTail: PEntity;
       bulletTail: PEntity;
 
-      constructor Create;
-      destructor Destroy; override;
+      constructor create;
+      destructor destroy; override;
 
     private
       procedure initPlayer;
+      procedure reset;
       procedure fireBullet;
       procedure doPlayer;
       procedure doFighters;
@@ -38,14 +40,17 @@ type
       procedure clipPlayer;
       
       function bulletHitFighter(b: PEntity): Boolean;
+
+      // ILogicAndRender
+      procedure logic;
+      procedure draw;
   end;
 
-procedure logic;
-procedure draw;
+// ******************** var ********************
+var
+  stage: TStage;
 
-procedure createStageAndInit;
-procedure destroyStageAndNil;
-procedure resetStage;
+procedure initStage;
 
 // ******************** implementation ********************
 implementation
@@ -57,13 +62,11 @@ uses
   sdl2,
   {shooter}
   Shooter.Defs,
-  Shooter.App,
   Shooter.Draw,
   Shooter.Util;
 
 var
   player: PEntity;
-  stage: TStage;
 
   playerTexture: PSDL_Texture;
   enemyTexture: PSDL_Texture;
@@ -74,22 +77,19 @@ var
   stageResetTimer: Integer;
 
 // 
-constructor TStage.Create;
+constructor TStage.create;
 begin
   fighterHead := createEntity^;
   bulletHead := createEntity^;
 
   fighterTail := @fighterHead;
   bulletTail := @bulletHead;
-
-  initPlayer;
 end;
 
 // 
-destructor TStage.Destroy;
+destructor TStage.destroy;
 begin
-
-  inherited Destroy;
+  inherited destroy;
 end;
 
 // 
@@ -184,7 +184,7 @@ begin
         self.fighterTail := prev;
 
       prev^.next := e^.next;
-      disposeEntity(e);
+      Dispose(e);
       e := prev;
     end;
 
@@ -218,7 +218,7 @@ begin
 
       prev^.next := b^.next;
       
-      disposeEntity(b);
+      Dispose(b);
       b := prev;
     end;
 
@@ -376,80 +376,73 @@ begin
 end;
 
 // 
-procedure logic;
+procedure TStage.logic;
 begin
-  stage.doPlayer;
-  stage.doEnemies;
-  stage.doFighters;
-  stage.doBullets;
-  stage.spawnEnemies;
-  stage.clipPlayer;
+  doPlayer;
+  doEnemies;
+  doFighters;
+  doBullets;
+  spawnEnemies;
+  clipPlayer;
 
   if player = Nil then
   begin
     Dec(stageResetTimer);
     if stageResetTimer <= 0 then
-      resetStage;
+      reset;
   end;
 
 end;
 
 // 
-procedure draw;
+procedure TStage.draw;
 begin
-  stage.drawFighters;
-  stage.drawBullets;
+  drawFighters;
+  drawBullets;
 end;
 
 // 
-procedure resetStage;
+procedure TStage.reset;
 var
   e: PEntity;
 begin
-  while stage.fighterHead.next <> Nil do 
+  while fighterHead.next <> Nil do 
   begin
-    e := stage.fighterHead.next;
-    stage.fighterHead.next := e^.next;
-    disposeEntity(e);
+    e := fighterHead.next;
+    fighterHead.next := e^.next;
+    Dispose(e);
   end;
 
-  while stage.bulletHead.next <> Nil do 
+  while bulletHead.next <> Nil do 
   begin
-    e := stage.bulletHead.next;
-    stage.bulletHead.next := e^.next;
-    disposeEntity(e);
+    e := bulletHead.next;
+    bulletHead.next := e^.next;
+    Dispose(e);
   end;
 
-  stage.fighterTail := @stage.fighterHead;
-  stage.bulletTail := @stage.bulletHead;
+  fighterTail := @fighterHead;
+  bulletTail := @bulletHead;
 
-  stage.initPlayer;
+  initPlayer;
 
   enemySpawnTimer := 0;
   stageResetTimer := FPS * 2;
 end;
 
 // 
-procedure createStageAndInit;
+procedure initStage;
 begin
-  app.delegate.logic := @logic;
-  app.delegate.draw := @draw;
+  stage := TStage.create;
 
   playerTexture := loadTexture('gfx/player.png');
   enemyTexture := loadTexture('gfx/enemy.png');
   bulletTexture := loadTexture('gfx/playerBullet.png');
   alienBulletTexture := loadTexture(('gfx/alienBullet.png'));
 
-  stage := TStage.Create;
+  stage.initPlayer;
 
   enemySpawnTimer := 0;
   stageResetTimer := FPS * 2;
-end;
-
-// 
-procedure destroyStageAndNil;
-begin
-  stage.Destroy;
 end;
 
 end.

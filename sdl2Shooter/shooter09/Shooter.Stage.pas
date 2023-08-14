@@ -27,8 +27,8 @@ type
       explosionTail: PExplosion;
       debrisTail: PDebris;
 
-      constructor Create;
-      destructor Destroy; override;
+      constructor create;
+      destructor destroy; override;
 
     private
       procedure initPlayer;
@@ -102,7 +102,7 @@ var
   stars: array[0..MAX_STARS] of TStar;
 
 // 
-constructor TStage.Create;
+constructor TStage.create;
 begin
   fighterHead := createEntity^;
   bulletHead := createEntity^;
@@ -113,16 +113,12 @@ begin
   bulletTail := @bulletHead;
   explosionTail := @explosionHead;
   debrisTail := @debrisHead;
-
-  initPlayer;
-  initStarfield;
 end;
 
 // 
-destructor TStage.Destroy;
+destructor TStage.destroy;
 begin
-
-  inherited Destroy;
+  inherited destroy;
 end;
 
 // 
@@ -745,7 +741,7 @@ end;
 // 
 procedure initStage;
 begin
-  stage := TStage.Create;
+  stage := TStage.create;
 
   playerTexture := loadTexture('gfx/player.png');
   enemyTexture := loadTexture('gfx/enemy.png');

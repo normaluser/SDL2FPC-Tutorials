@@ -78,7 +78,7 @@ implementation
 
 uses
   {rtl}
-  SysUtils,
+  sysutils,
   {sdl2}
   sdl2,
   {shooter}

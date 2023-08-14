@@ -18,9 +18,7 @@ uses
 // 
 procedure atExit;
 begin
-  SDL_DestroyRenderer(app.renderer);
-  SDL_DestroyWindow(app.window);
-  SDL_Quit;
+  cleanUp;
 
   if ExitCode <> 0 then
     WriteLn(SDL_GetError)
@@ -34,6 +32,7 @@ begin
 
   player.x := 100;
   player.y := 100;
+
   player.texture := loadTexture('gfx/player.png');
 
   AddExitProc(@atExit);
@@ -41,6 +40,7 @@ begin
   while true do
   begin
     prepareScene;
+
     doInput;
 
     if app.up then player.y -= 4;
@@ -49,7 +49,9 @@ begin
     if app.right then player.x += 4;
 
     blit(player.texture, player.x, player.y);
+
     presentScene;
+    
     SDL_Delay(16);
   end;
 

@@ -18,9 +18,7 @@ uses
 // 
 procedure atExit;
 begin
-  SDL_DestroyRenderer(app.renderer);
-  SDL_DestroyWindow(app.window);
-  SDL_Quit;
+  cleanUp;
   
   if ExitCode <> 0 then
     WriteLn(SDL_GetError)
@@ -31,13 +29,17 @@ end;
 // 
 begin
   initSDL;
+
   AddExitProc(@atExit);
 
   while true do
   begin
     prepareScene;
+
     doInput;
+
     presentScene;
+    
     SDL_Delay(16);
   end;
 

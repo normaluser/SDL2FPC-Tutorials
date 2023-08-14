@@ -10,14 +10,14 @@ unit Shooter.Init;
 interface
 
 procedure initSDL;
-procedure cleanup;
+procedure cleanUp;
 
 // ******************** implementation ********************
 implementation
 
 uses
   {rtl}
-  SysUtils,
+  sysutils,
   {sdl2}
   sdl2,
   {shooter}
@@ -62,7 +62,7 @@ begin
 end;
 
 // 
-procedure cleanup;
+procedure cleanUp;
 begin
   SDL_DestroyRenderer(app.renderer);
   SDL_DestroyWindow(app.window);

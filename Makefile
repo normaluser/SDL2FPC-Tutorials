@@ -33,7 +33,8 @@ build-all: \
 	build-shooter09 \
 	build-shooter10 \
 	build-shooter11 \
-	build-shooter12
+	build-shooter12 \
+	build-shooter13
 
 clear-all: \
 	clear-shooter01 \
@@ -47,7 +48,8 @@ clear-all: \
 	clear-shooter09 \
 	clear-shooter10 \
 	clear-shooter11 \
-	clear-shooter12
+	clear-shooter12 \
+	clear-shooter13
 
 write-all: \
 	write-shooter01 \
@@ -61,7 +63,8 @@ write-all: \
 	write-shooter09 \
 	write-shooter10 \
 	write-shooter11 \
-	write-shooter12
+	write-shooter12 \
+	write-shooter13
 
 # ******************** shooter01 ********************
 build-shooter01:
@@ -254,3 +257,19 @@ run-shooter12:
 
 debug-shooter12:
 	$(call debug-project, sdl2Shooter/shooter12, shooter12)
+
+# ******************** shooter13 ********************
+build-shooter13:
+	$(call build-project, sdl2Shooter/shooter13)
+
+clear-shooter13:
+	$(call clear-project, sdl2Shooter/shooter13)
+
+write-shooter13:
+	$(call write-project, sdl2Shooter/shooter13)
+
+run-shooter13:
+	$(call run-project, sdl2Shooter/shooter13, shooter13)
+
+debug-shooter13:
+	$(call debug-project, sdl2Shooter/shooter13, shooter13)

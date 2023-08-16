@@ -79,21 +79,21 @@ var
   i: Integer;
   y: Integer;
 begin
-  y := 150;
+  y := 80;
 
-  drawText(425, 70, 255, 255, 255, 'HIGHSCORES');
+  drawText(375, 20, 255, 255, 255, 'HIGHSCORES');
 
   for i := 0 to NUM_HIGHSCORES do
   begin
     if scores[i].recent <> 0 then
-      drawText(425, y, 255, 255, 0, Format('#%d ............. %0.3d', [(i + 1), scores[i].score]))
+      drawText(375, y, 255, 255, 0, Format('#%d ............. %0.3d', [(i + 1), scores[i].score]))
     else
-      drawText(425, y, 255, 255, 255, Format('#%d ............. %0.3d', [(i + 1), scores[i].score]));
+      drawText(375, y, 255, 255, 255, Format('#%d ............. %0.3d', [(i + 1), scores[i].score]));
 
     y += 50;
   end;
 
-  drawText(425, 600, 255, 255, 255, 'PRESS FIRE TO PLAY!');
+  drawText(375, 530, 255, 255, 255, 'PRESS FIRE TO PLAY!');
 end;
 
 // 

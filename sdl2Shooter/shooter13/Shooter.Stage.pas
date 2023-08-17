@@ -17,7 +17,7 @@ uses
 
 // ******************** type ********************
 type
-  TStage = class(TCoreInterfacedObject, ILogic)
+  TStage = class(TCoreInterfacedObject, ILogicAndRender)
     public
       fighterHead: TEntity;
       bulletHead: TEntity;
@@ -42,7 +42,7 @@ type
 
       procedure reset;
 
-      // ILogic
+      // ILogicAndRender
       procedure logic;
       procedure draw;
 
@@ -779,6 +779,8 @@ begin
   pointsTail := @pointsHead;
   explosionTail := @explosionHead;
   debrisTail := @debrisHead;
+
+  score := 0;
 end;
 
 // 
@@ -858,7 +860,7 @@ begin
   stage.resetTimer := FPS * 3;
   stage.enemyTimer := 0;
 
-  app.step := 'stage';
+  app.delegate := stage;
 end;
 
 end.

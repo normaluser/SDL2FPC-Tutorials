@@ -13,7 +13,6 @@ uses
   Shooter.App,
   Shooter.Draw,
   Shooter.Input,
-  Shooter.Stage,
   Shooter.Audio,
   Shooter.Text,
   Shooter.Background,
@@ -77,19 +76,11 @@ begin
 
     doInput;
 
-    case app.step of
-      'highscores':
-      begin
-        app.logic(highscores as ILogic);
+    if app.delegate <> Nil then
+    begin
+      app.delegate.logic;
 
-        app.draw(highscores as ILogic);
-      end;
-      'stage':
-      begin
-        app.logic(stage as ILogic);
-
-        app.draw(stage as ILogic);
-      end;
+      app.delegate.draw;
     end;
 
     presentScene;

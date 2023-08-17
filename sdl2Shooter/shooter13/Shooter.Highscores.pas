@@ -19,7 +19,7 @@ uses
   Shooter.Structs;
 
 type
-  THighscores = class(TCoreInterfacedObject, ILogic)
+  THighscores = class(TCoreInterfacedObject, ILogicAndRender)
     public
       scores: array[0..NUM_HIGHSCORES] of THighscore;
 
@@ -29,7 +29,7 @@ type
       procedure addHighscore(score: Integer);
       procedure reset;
 
-      // ILogic
+      // ILogicAndRender
       procedure logic;
       procedure draw;
 
@@ -81,11 +81,11 @@ var
   i: Integer;
   y: Integer;
 begin
-  y := 80;
+  y := 100;
 
   drawText(375, 20, 255, 255, 255, 'HIGHSCORES');
 
-  for i := 0 to NUM_HIGHSCORES do
+  for i := 0 to (NUM_HIGHSCORES - 1) do
   begin
     if scores[i].recent <> 0 then
       drawText(375, y, 255, 255, 0, Format('#%d ............. %0.3d', [(i + 1), scores[i].score]))
@@ -114,9 +114,9 @@ end;
 function highscoreComparator(constref a: THighscore; constref b: THighscore): Integer;
 begin
   if a.score < b.score then
-    Result := -1
-  else if a.score > b.score then
     Result := 1
+  else if a.score > b.score then
+    Result := -1
   else
     Result := 0;
 end;
@@ -184,7 +184,7 @@ begin
 
   highscores.reset;
 
-  app.step := 'highscores';
+  app.delegate := highscores;
 end;
 
 end.

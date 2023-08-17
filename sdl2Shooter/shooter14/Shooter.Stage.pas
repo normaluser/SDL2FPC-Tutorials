@@ -486,12 +486,12 @@ end;
 // 
 procedure TStage.drawHud;
 begin
-  drawText(10, 10, 255, 255, 255, Format('SCORE: %0.3d', [score]));
+  drawText(10, 10, 255, 255, 255, TEXT_LEFT, Format('SCORE: %0.3d', [score]));
 
   if score < highscores.scores[0].score then
-    drawText(764, 10, 255, 255, 255, Format('HIGHSCORE: %0.3d', [highscores.scores[0].score]))
+    drawText(SCREEN_WIDTH - 10, 10, 255, 255, 255, TEXT_RIGHT, Format('HIGHSCORE: %0.3d', [highscores.scores[0].score]))
   else
-    drawText(764, 10, 0, 255, 0, Format('HIGHSCORE: %0.3d', [score]));
+    drawText(SCREEN_WIDTH - 10, 10, 0, 255, 0, TEXT_RIGHT, Format('HIGHSCORE: %0.3d', [score]));
 end;
 
 // 

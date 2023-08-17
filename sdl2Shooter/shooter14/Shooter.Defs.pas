@@ -46,6 +46,10 @@ const
 
   NUM_HIGHSCORES = 8;
 
+  TEXT_LEFT = 0;
+  TEXT_CENTER = 1;
+  TEXT_RIGHT = 2;
+
 function MIN(a, b: Double): Double; inline;
 function MIN(a, b: Integer): Integer; inline;
 

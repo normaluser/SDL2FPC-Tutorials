@@ -43,6 +43,8 @@ var
   event: TSDL_Event;
   text: array[0..SDL_TEXTINPUTEVENT_TEXT_SIZE] of Char;
 begin
+  app.inputText := '';
+
   while SDL_PollEvent(@event) = 1 do
   begin
     case event.Type_ of
@@ -52,7 +54,11 @@ begin
 
       SDL_KEYUP: doKeyUp(@event);
 
-      SDL_TEXTINPUT: SetString(app.inputText, text, StrLen(text));
+      SDL_TEXTINPUT:
+      begin
+        text := event.text.text;
+        SetString(app.inputText, text, StrLen(text));
+      end;
     end;
   end;
 end;

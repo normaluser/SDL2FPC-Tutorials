@@ -19,13 +19,14 @@ const
   GLYPH_WIDTH = 18;
 
 procedure initFonts;
-procedure drawText(x, y: Integer; r, g, b: Integer; outText: String);
+procedure drawText(x, y: Integer; r, g, b: Integer; align: Integer; outText: String);
 
 // ******************** implementation ********************
 implementation
 
 uses
   {shooter}
+  Shooter.Defs,
   Shooter.Draw;
 
 // ******************** var ********************
@@ -37,7 +38,7 @@ begin
   fontTexture := loadTexture('gfx/font.png');
 end;
 
-procedure drawText(x, y: Integer; r, g, b: Integer; outText: String);
+procedure drawText(x, y: Integer; r, g, b: Integer; align: Integer; outText: String);
 var
   i: Integer;
   len: Integer;
@@ -46,6 +47,11 @@ var
 begin
   len := LENGTH(outText);
   outText := UPCASE(outText);
+
+  case align of
+    TEXT_RIGHT: x -= (len * GLYPH_WIDTH);
+    TEXT_CENTER: x -= (len * GLYPH_WIDTH) Div 2;
+  end;
 
   rect.w := GLYPH_WIDTH;
   rect.h := GLYPH_HEIGHT;

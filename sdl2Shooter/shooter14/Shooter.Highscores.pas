@@ -70,6 +70,7 @@ begin
   begin
     scores[i].recent := 0;
     scores[i].score := NUM_HIGHSCORES - i;
+    scores[i].name := 'ANONYMOUS';
   end;
 
   nameScore := Nil;
@@ -87,22 +88,36 @@ procedure THighscores.drawHighscores;
 var
   i: Integer;
   y: Integer;
+  r, g, b: Integer;
 begin
   y := 100;
 
-  drawText(375, 20, 255, 255, 255, 'HIGHSCORES');
+  drawText(SCREEN_WIDTH Div 2, 20, 255, 255, 255, TEXT_CENTER, 'HIGHSCORES');
 
   for i := 0 to (NUM_HIGHSCORES - 1) do
   begin
+    r := 255;
+    g := 255;
+    b := 255;
+
     if scores[i].recent <> 0 then
-      drawText(375, y, 255, 255, 0, Format('#%d ............. %0.3d', [(i + 1), scores[i].score]))
-    else
-      drawText(375, y, 255, 255, 255, Format('#%d ............. %0.3d', [(i + 1), scores[i].score]));
+      b := 0;
+
+    drawText( SCREEN_WIDTH Div 2, 
+              y, 
+              r, g, b, 
+              TEXT_CENTER, 
+              Format('#%d. %-15s ...... %0.3d', [
+                (i + 1), 
+                scores[i].name, 
+                scores[i].score
+              ])
+            );
 
     y += 50;
   end;
 
-  drawText(375, 530, 255, 255, 255, 'PRESS FIRE TO PLAY!');
+  drawText(SCREEN_WIDTH Div 2, 530, 255, 255, 255, TEXT_CENTER, 'PRESS FIRE TO PLAY!');
 end;
 
 // 
@@ -140,7 +155,7 @@ begin
   newScores := specialize TList<THighscore>.Create;
 
   // Copy scores to newScores
-  for i := 0 to NUM_HIGHSCORES do
+  for i := 0 to (NUM_HIGHSCORES - 1) do
   begin
     t := scores[i];
     t.recent := 0;
@@ -157,7 +172,7 @@ begin
 
   nameScore := Nil;
 
-  for i := 0 to NUM_HIGHSCORES do
+  for i := 0 to (NUM_HIGHSCORES - 1) do
   begin
     scores[i] := newScores[i];
 
@@ -212,7 +227,7 @@ begin
 
     if (n < MAX_SCORE_NAME_LENGTH - 1) and (c >= ' ') and (c <= 'Z') then
     begin
-      nameScore^.name[n + 1] := c;
+      nameScore^.name += c;
       Inc(n);
     end;
   end;
@@ -237,11 +252,11 @@ procedure THighscores.drawNameInput;
 var
   r: TSDL_Rect;
 begin
-  drawText(SCREEN_WIDTH Div 2, 70, 255, 255, 255, 'CONGRATULATIONS, YOU''VE GAINED A HIGHSCORE!');
+  drawText(SCREEN_WIDTH Div 2, 70, 255, 255, 255, TEXT_CENTER, 'CONGRATULATIONS, YOU''VE GAINED A HIGHSCORE!');
 
-  drawText(SCREEN_WIDTH Div 2, 120, 255, 255, 255, 'ENTER YOUR NAME BELOW:');
+  drawText(SCREEN_WIDTH Div 2, 120, 255, 255, 255, TEXT_CENTER, 'ENTER YOUR NAME BELOW:');
 
-  drawText(SCREEN_WIDTH Div 2, 250, 128, 255, 128, nameScore^.name);
+  drawText(SCREEN_WIDTH Div 2, 250, 128, 255, 128, TEXT_CENTER, nameScore^.name);
 
   if cursor < (FPS Div 2) then
   begin
@@ -254,7 +269,7 @@ begin
     SDL_RenderFillRect(app.renderer, @r);
   end;
 
-  drawText(SCREEN_WIDTH Div 2, 625, 255, 255, 255, 'PRESS RETURN WHEN FINISHED');
+  drawText(SCREEN_WIDTH Div 2, 625, 255, 255, 255, TEXT_CENTER, 'PRESS RETURN WHEN FINISHED');
 end;
 
 procedure initHighscores;

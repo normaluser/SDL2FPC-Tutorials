@@ -763,8 +763,8 @@ begin
     if player^.y < 0 then
       player^.y := 0;
 
-    if player^.x > (SCREEN_WIDTH Div 2) then
-      player^.x := SCREEN_WIDTH Div 2;
+    if player^.x > (SCREEN_WIDTH - player^.w) then
+      player^.x := SCREEN_WIDTH - player^.w;
 
     if player^.y > (SCREEN_HEIGHT - player^.h) then
       player^.y := SCREEN_HEIGHT - player^.h;

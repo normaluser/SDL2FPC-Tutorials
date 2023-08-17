@@ -22,6 +22,8 @@ type
   THighscores = class(TCoreInterfacedObject, ILogicAndRender)
     public
       scores: array[0..NUM_HIGHSCORES] of THighscore;
+      nameScore: PHighscore;
+      cursor: Integer;
 
       constructor create;
       destructor destroy; override;
@@ -35,6 +37,8 @@ type
 
     private
       procedure drawHighscores;
+      procedure doNameInput;
+      procedure drawNameInput;
   end;
 
 // ******************** var ********************
@@ -67,6 +71,9 @@ begin
     scores[i].recent := 0;
     scores[i].score := NUM_HIGHSCORES - i;
   end;
+
+  nameScore := Nil;
+  cursor := 0;
 end;
 
 // 
@@ -148,8 +155,15 @@ begin
   
   newScores.Sort(comparer);
 
+  nameScore := Nil;
+
   for i := 0 to NUM_HIGHSCORES do
+  begin
     scores[i] := newScores[i];
+
+    if scores[i].recent <> 0 then
+      nameScore := @scores[i];
+  end;
 
   newScores.Free;  // Don't forget to free the memory for the list after using it
 end;
@@ -161,8 +175,13 @@ begin
 
   background.doStarfield;
 
-  if app.keyboard[SDL_SCANCODE_SPACE] <> 0 then
-    initStage;
+  if nameScore <> Nil then
+    doNameInput
+  else
+  begin
+    if app.keyboard[SDL_SCANCODE_SPACE] <> 0 then
+      initStage;
+  end;
 end;
 
 // 
@@ -172,7 +191,70 @@ begin
 
   background.drawStarfield;
 
-  drawHighscores;
+  if nameScore <> Nil then
+    drawNameInput
+  else
+    drawHighscores;
+end;
+
+// 
+procedure THighscores.doNameInput;
+var
+  i: Integer;
+  n: Integer;
+  c: Char;
+begin
+  n := Length(nameScore^.name);
+
+  for i := 1 to Length(app.inputText) do
+  begin
+    c := UpCase(app.inputText[i]);
+
+    if (n < MAX_SCORE_NAME_LENGTH - 1) and (c >= ' ') and (c <= 'Z') then
+    begin
+      nameScore^.name[n + 1] := c;
+      Inc(n);
+    end;
+  end;
+
+  if (n > 0) and (app.keyboard[SDL_SCANCODE_BACKSPACE] = 1) then
+  begin
+    nameScore^.name[n] := #0;
+    app.keyboard[SDL_SCANCODE_BACKSPACE] := 0;
+  end;
+
+  if app.keyboard[SDL_SCANCODE_RETURN] = 1 then
+  begin
+    if Length(nameScore^.name) = 0 then
+      nameScore^.name := 'ANONYMOUS';
+
+    nameScore := nil;
+  end;
+end;
+
+// 
+procedure THighscores.drawNameInput;
+var
+  r: TSDL_Rect;
+begin
+  drawText(SCREEN_WIDTH Div 2, 70, 255, 255, 255, 'CONGRATULATIONS, YOU''VE GAINED A HIGHSCORE!');
+
+  drawText(SCREEN_WIDTH Div 2, 120, 255, 255, 255, 'ENTER YOUR NAME BELOW:');
+
+  drawText(SCREEN_WIDTH Div 2, 250, 128, 255, 128, nameScore^.name);
+
+  if cursor < (FPS Div 2) then
+  begin
+    r.x := ((SCREEN_WIDTH Div 2) + (Length(nameScore^.name) * GLYPH_WIDTH) Div 2) + 5;
+    r.y := 250;
+    r.w := GLYPH_WIDTH;
+    r.h := GLYPH_HEIGHT;
+
+    SDL_SetRenderDrawColor(app.renderer, 0, 255, 0, 255);
+    SDL_RenderFillRect(app.renderer, @r);
+  end;
+
+  drawText(SCREEN_WIDTH Div 2, 625, 255, 255, 255, 'PRESS RETURN WHEN FINISHED');
 end;
 
 procedure initHighscores;

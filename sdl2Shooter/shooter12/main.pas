@@ -75,9 +75,12 @@ begin
 
     doInput;
 
-    app.logic(stage as ILogicAndRender);
+    if app.delegate <> Nil then
+    begin
+      app.delegate.logic;
 
-    app.draw(stage as ILogicAndRender);
+      app.delegate.draw;
+    end;
 
     presentScene;
 

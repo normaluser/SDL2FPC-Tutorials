@@ -11,12 +11,13 @@ interface
 
 uses
   {shooter}
+  Shooter.Core,
   Shooter.App,
   Shooter.Structs;
 
 // ******************** type ********************
 type
-  TStage = class(TInterfacedObject, ILogicAndRender)
+  TStage = class(TCoreInterfacedObject, ILogicAndRender)
     public
       fighterHead: TEntity;
       bulletHead: TEntity;
@@ -794,8 +795,6 @@ begin
         addPointsPod(e^.x + (e^.w Div 2), e^.y + (e^.h Div 2));
         
         audio.playSound(SND_ALIEN_DIE, CH_ANY);
-        Inc(score);
-        highscore := MAX(score, highscore);
       end;
 
       Result := true;
@@ -918,6 +917,8 @@ begin
 
   enemySpawnTimer := 0;
   stageResetTimer := FPS * 2;
+
+  app.delegate := stage;
 end;
 
 end.

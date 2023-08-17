@@ -11,11 +11,12 @@ interface
 
 uses
   {shooter}
+  Shooter.Core,
   Shooter.App,
   Shooter.Structs;
 
 type
-  TStage = class(TInterfacedObject, ILogicAndRender)
+  TStage = class(TCoreInterfacedObject, ILogicAndRender)
     public
       fighterHead: TEntity;
       bulletHead: TEntity;
@@ -755,6 +756,8 @@ begin
 
   enemySpawnTimer := 0;
   stageResetTimer := FPS * 2;
+
+  app.delegate := stage;
 end;
 
 end.

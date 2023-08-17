@@ -24,15 +24,15 @@ type
   end;
 
   TApp = class(TObject)
-    renderer: PSDL_Renderer;
-    window: PSDL_Window;
-    keyboard: array[0..MAX_KEYBOARD_KEYS] of Integer;
+    public
+      renderer: PSDL_Renderer;
+      window: PSDL_Window;
+      keyboard: array[0..MAX_KEYBOARD_KEYS] of Integer;
 
-    constructor create;
-    destructor destroy; override;
+      delegate: ILogicAndRender;
 
-    procedure logic(i: ILogicAndRender);
-    procedure draw(i: ILogicAndRender);
+      constructor create;
+      destructor destroy; override;
   end;
 
 // ******************** var ********************
@@ -120,20 +120,6 @@ begin
 
   SDL_Quit;
   inherited destroy;
-end;
-
-// 
-procedure TApp.logic(i: ILogicAndRender);
-begin
-  if Assigned(i) then
-    i.logic;
-end;
-
-// 
-procedure TApp.draw(i: ILogicAndRender);
-begin
-  if Assigned(i) then
-    i.draw;
 end;
 
 procedure initApp;

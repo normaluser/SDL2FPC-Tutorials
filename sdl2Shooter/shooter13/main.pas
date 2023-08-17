@@ -77,18 +77,19 @@ begin
 
     doInput;
 
-    if stage <> Nil then
-    begin
-      app.logic(stage as ILogicAndRender);
+    case app.step of
+      'highscores':
+      begin
+        app.logic(highscores as ILogic);
 
-      app.draw(stage as ILogicAndRender);
-    end;
+        app.draw(highscores as ILogic);
+      end;
+      'stage':
+      begin
+        app.logic(stage as ILogic);
 
-    if (stage = Nil) and (highscores <> Nil) then
-    begin
-      app.logic(highscores as ILogicAndRender);
-
-      app.draw(highscores as ILogicAndRender);
+        app.draw(stage as ILogic);
+      end;
     end;
 
     presentScene;

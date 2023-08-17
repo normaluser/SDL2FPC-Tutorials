@@ -18,24 +18,28 @@ uses
 
 // ******************** type ********************
 type
-  ILogicAndRender = interface
+  ILogic = interface
     ['{2EC79BCE-AC61-4E51-B187-1C5C9850ED0C}']
     procedure logic;
     procedure draw;
   end;
 
   TApp = class(TObject)
-    renderer: PSDL_Renderer;
-    window: PSDL_Window;
-    keyboard: array[0..MAX_KEYBOARD_KEYS] of Integer;
-    textureHead: TTexture;
-    textureTail: PTexture;
+    public
+      renderer: PSDL_Renderer;
+      window: PSDL_Window;
+      keyboard: array[0..MAX_KEYBOARD_KEYS] of Integer;
 
-    constructor create;
-    destructor destroy; override;
+      textureHead: TTexture;
+      textureTail: PTexture;
 
-    procedure logic(i: ILogicAndRender);
-    procedure draw(i: ILogicAndRender);
+      step: String;
+
+      constructor create;
+      destructor destroy; override;
+
+      procedure logic(i: ILogic);
+      procedure draw(i: ILogic);
   end;
 
 // ******************** var ********************
@@ -128,14 +132,14 @@ begin
 end;
 
 // 
-procedure TApp.logic(i: ILogicAndRender);
+procedure TApp.logic(i: ILogic);
 begin
   if Assigned(i) then
     i.logic;
 end;
 
 // 
-procedure TApp.draw(i: ILogicAndRender);
+procedure TApp.draw(i: ILogic);
 begin
   if Assigned(i) then
     i.draw;

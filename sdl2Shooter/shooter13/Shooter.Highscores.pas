@@ -13,12 +13,13 @@ uses
   {sdl2}
   sdl2,
   {shooter}
+  Shooter.Core,
   Shooter.App,
   Shooter.Defs,
   Shooter.Structs;
 
 type
-  THighscores = class(TInterfacedObject, ILogicAndRender)
+  THighscores = class(TCoreInterfacedObject, ILogic)
     public
       scores: array[0..NUM_HIGHSCORES] of THighscore;
 
@@ -26,13 +27,14 @@ type
       destructor destroy; override;
 
       procedure addHighscore(score: Integer);
+      procedure reset;
+
+      // ILogic
+      procedure logic;
+      procedure draw;
 
     private
       procedure drawHighscores;
-
-      // ILogicAndRender
-      procedure logic;
-      procedure draw;
   end;
 
 // ******************** var ********************
@@ -97,6 +99,18 @@ begin
 end;
 
 // 
+procedure THighscores.reset;
+var
+  i: Integer;
+begin
+  for i := 0 to NUM_HIGHSCORES do
+  begin
+    scores[i].recent := 0;
+    scores[i].score := NUM_HIGHSCORES - i;
+  end;
+end;
+
+// 
 function highscoreComparator(constref a: THighscore; constref b: THighscore): Integer;
 begin
   if a.score < b.score then
@@ -148,7 +162,9 @@ begin
   background.doStarfield;
 
   if app.keyboard[SDL_SCANCODE_SPACE] <> 0 then
+  begin
     initStage;
+  end;
 end;
 
 // 
@@ -163,10 +179,12 @@ end;
 
 procedure initHighscores;
 begin
-  highscores := THighscores.create;
+  if highscores = Nil then
+    highscores := THighscores.create;
 
-  stage.Free;
-  stage := Nil;
+  highscores.reset;
+
+  app.step := 'highscores';
 end;
 
 end.

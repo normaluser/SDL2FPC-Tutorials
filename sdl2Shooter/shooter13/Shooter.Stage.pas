@@ -11,12 +11,13 @@ interface
 
 uses
   {shooter}
+  Shooter.Core,
   Shooter.App,
   Shooter.Structs;
 
 // ******************** type ********************
 type
-  TStage = class(TInterfacedObject, ILogicAndRender)
+  TStage = class(TCoreInterfacedObject, ILogic)
     public
       fighterHead: TEntity;
       bulletHead: TEntity;
@@ -30,15 +31,23 @@ type
       explosionTail: PExplosion;
       debrisTail: PDebris;
 
+      player: PEntity;
+
       score: Integer;
+      resetTimer: Integer;
+      enemyTimer: Integer;
 
       constructor create;
       destructor destroy; override;
 
+      procedure reset;
+
+      // ILogic
+      procedure logic;
+      procedure draw;
+
     private
       procedure initPlayer;
-
-      procedure reset;
 
       procedure doPlayer;
       procedure doFighters;
@@ -65,10 +74,6 @@ type
       procedure clipPlayer;
       
       function bulletHitFighter(b: PEntity): Boolean;
-
-      // ILogicAndRender
-      procedure logic;
-      procedure draw;
   end;
 
 // ******************** var ********************
@@ -96,17 +101,12 @@ uses
 
 // ******************** var ********************
 var
-  player: PEntity;
-
   playerTexture: PSDL_Texture;
   enemyTexture: PSDL_Texture;
   bulletTexture: PSDL_Texture;
   alienBulletTexture: PSDL_Texture;
   explosionTexture: PSDL_Texture;
   pointsTexture: PSDL_Texture;
-
-  enemySpawnTimer: Integer;
-  stageResetTimer: Integer;
 
 // 
 constructor TStage.create;
@@ -621,8 +621,8 @@ procedure TStage.spawnEnemies;
 var
   enemy: PEntity;
 begin
-  Dec(enemySpawnTimer);
-  if enemySpawnTimer <= 0 then
+  Dec(enemyTimer);
+  if enemyTimer <= 0 then
   begin
     enemy := createEntity;
     self.fighterTail^.next := enemy;
@@ -641,7 +641,7 @@ begin
 
     enemy^.reload := FPS * (1 + Random(3));
 
-    enemySpawnTimer := 30 + (Random(FPS));
+    enemyTimer := 30 + (Random(FPS));
   end;
 end;
 
@@ -808,12 +808,12 @@ begin
 
   if player = Nil then
   begin
-    Dec(stageResetTimer);
-    if stageResetTimer <= 0 then
+    Dec(resetTimer);
+    if resetTimer <= 0 then
     begin
-      highscores.addHighscore(score);
-
       initHighscores;
+
+      highscores.addHighscore(score);
     end;
   end;
 end;
@@ -841,24 +841,24 @@ end;
 // 
 procedure initStage;
 begin
-  stage := TStage.create;
+  if stage = Nil then
+  begin
+    stage := TStage.create;
 
-  playerTexture := loadTexture('gfx/player.png');
-  enemyTexture := loadTexture('gfx/enemy.png');
-  bulletTexture := loadTexture('gfx/playerBullet.png');
-  alienBulletTexture := loadTexture(('gfx/alienBullet.png'));
-  explosionTexture := loadTexture('gfx/explosion.png');
-  pointsTexture := loadTexture('gfx/points.png');
+    playerTexture := loadTexture('gfx/player.png');
+    enemyTexture := loadTexture('gfx/enemy.png');
+    bulletTexture := loadTexture('gfx/playerBullet.png');
+    alienBulletTexture := loadTexture(('gfx/alienBullet.png'));
+    explosionTexture := loadTexture('gfx/explosion.png');
+    pointsTexture := loadTexture('gfx/points.png');
+  end;
 
   stage.reset;
-
   stage.initPlayer;
+  stage.resetTimer := FPS * 3;
+  stage.enemyTimer := 0;
 
-  enemySpawnTimer := 0;
-  stageResetTimer := FPS * 3;
-
-  // highscores.Free;
-  // highscores := Nil;
+  app.step := 'stage';
 end;
 
 end.

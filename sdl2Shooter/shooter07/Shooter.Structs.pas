@@ -29,6 +29,8 @@ type
     next: PEntity;
   end;
 
+procedure disposeAndNext(t: PEntity; ignore: PEntity);
+
 function createEntity: PEntity;
 
 // ******************** implementation ********************
@@ -54,6 +56,28 @@ begin
     next := Nil;
   end;
   Result := e;
+end;
+
+// 
+procedure disposeAndNext(t: PEntity; ignore: PEntity);
+var
+  e: PEntity;
+  prev: PEntity;
+begin
+  prev := t;
+  e := t^.next;
+  while e <> Nil do
+  begin
+    if (e <> ignore) then
+    begin
+      prev^.next := e^.next;
+      Dispose(e);
+      e := prev;
+    end;
+    prev := e;
+
+    e := e^.next;
+  end;
 end;
 
 end.

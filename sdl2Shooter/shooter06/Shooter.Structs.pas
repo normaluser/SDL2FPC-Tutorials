@@ -57,6 +57,7 @@ begin
   Result := e;
 end;
 
+// 
 procedure disposeAndNext(t: PEntity; ignore: PEntity);
 var
   e: PEntity;

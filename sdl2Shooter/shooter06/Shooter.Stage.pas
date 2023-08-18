@@ -60,9 +60,6 @@ var
 // 
 constructor TStage.create;
 begin
-  fighterHead := createEntity^;
-  bulletHead := createEntity^;
-
   fighterTail := @fighterHead;
   bulletTail := @bulletHead;
 end;
@@ -70,6 +67,8 @@ end;
 // 
 destructor TStage.destroy;
 begin
+  disposeAndNext(@stage.fighterHead, @player);
+  disposeAndNext(@stage.bulletHead, Nil);
 
   inherited destroy;
 end;
@@ -270,8 +269,6 @@ begin
   enemySpawnTimer := 0;
 
   initPlayer;
-
-  app.delegate := stage;
 end;
 
 end.

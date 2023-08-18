@@ -19,6 +19,7 @@ uses
 procedure atExit;
 begin
   app.delegate := Nil;
+  
   stage.destroy;
   app.destroy;
 

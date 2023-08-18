@@ -117,6 +117,8 @@ end;
 // 
 destructor TApp.destroy;
 begin
+  disposeTextureAndNext(@app.textureHead);
+
   Mix_Quit;
 
   IMG_Quit;

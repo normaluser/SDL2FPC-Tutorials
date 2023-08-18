@@ -7,6 +7,7 @@ program main;
 {$H+}
 
 uses
+  heaptrc,
   {sdl2}
   sdl2,
   {shooter}
@@ -23,9 +24,15 @@ uses
 // 
 procedure atExit;
 begin
-  stage.destroy;
+  app.delegate := Nil;
+
+  if stage <> Nil then
+    stage.destroy;
+
+  if highscores <> Nil then
+    highscores.destroy;
+
   title.destroy;
-  highscores.destroy;
   background.destroy;
   audio.destroy;
   app.destroy;

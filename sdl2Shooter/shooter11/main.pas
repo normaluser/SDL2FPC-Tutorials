@@ -7,7 +7,6 @@ program main;
 {$H+}
 
 uses
-  heaptrc,
   {sdl2}
   sdl2,
   {shooter}

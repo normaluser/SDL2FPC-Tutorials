@@ -57,9 +57,7 @@ var
 // 
 constructor TStage.create;
 begin
-  fighterHead := createEntity^;
-  bulletHead := createEntity^;
-
+  inherited;
   fighterTail := @fighterHead;
   bulletTail := @bulletHead;
 end;
@@ -67,7 +65,6 @@ end;
 // 
 destructor TStage.destroy;
 begin
-
   inherited destroy;
 end;
 
@@ -205,8 +202,6 @@ begin
   bulletTexture := loadTexture('gfx/playerBullet.png');
 
   initPlayer;
-
-  app.delegate := stage;
 end;
 
 end.

@@ -20,6 +20,7 @@ uses
 // 
 procedure atExit;
 begin
+  stage.destroy;
   audio.destroy;
   app.destroy;
 

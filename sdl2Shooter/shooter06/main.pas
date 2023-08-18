@@ -18,6 +18,7 @@ uses
 // 
 procedure atExit;
 begin
+  stage.destroy;
   app.destroy;
 
   if ExitCode <> 0 then

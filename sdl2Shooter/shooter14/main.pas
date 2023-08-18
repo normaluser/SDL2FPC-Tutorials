@@ -16,11 +16,15 @@ uses
   Shooter.Audio,
   Shooter.Text,
   Shooter.Background,
-  Shooter.Highscores;
+  Shooter.Highscores,
+  Shooter.Stage;
 
 // 
 procedure atExit;
 begin
+  stage.destroy;
+  highscores.destroy;
+  background.destroy;
   audio.destroy;
   app.destroy;
 

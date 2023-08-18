@@ -1,6 +1,8 @@
 
 # SDL2FPC-Tutorials
 
+<img src="./Shooter.png" style="width: 512px;" />
+
 ### Build
 
 Make sure sdl2forpascal package is inside the pkg folder  

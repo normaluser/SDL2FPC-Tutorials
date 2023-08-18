@@ -25,6 +25,8 @@ type
       nameScore: PHighscore;
       cursor: Integer;
 
+      timeout: Integer;
+
       constructor create;
       destructor destroy; override;
 
@@ -76,6 +78,7 @@ begin
 
   nameScore := Nil;
   cursor := 0;
+  timeout := FPS * 5;
 end;
 
 // 
@@ -117,8 +120,6 @@ begin
 
     y += 50;
   end;
-
-  drawText(SCREEN_WIDTH Div 2, 530, 255, 255, 255, TEXT_CENTER, 'PRESS FIRE TO PLAY!');
 end;
 
 // 
@@ -131,6 +132,9 @@ begin
     scores[i].recent := 0;
     scores[i].score := NUM_HIGHSCORES - i;
   end;
+
+  cursor := 0;
+  timeout := FPS * 5;
 end;
 
 // 
@@ -195,8 +199,8 @@ begin
     doNameInput
   else
   begin
-    Dec(title.timeout);
-    if title.timeout <= 0 then
+    Dec(timeout);
+    if timeout <= 0 then
     begin
       initTitle;
       app.delegate := title;
@@ -224,7 +228,12 @@ begin
   if nameScore <> Nil then
     drawNameInput
   else
+  begin
     drawHighscores;
+
+    if (timeout Div 40) < 20 then
+      drawText(SCREEN_WIDTH Div 2, 525, 255, 255, 255, TEXT_CENTER, 'PRESS FIRE TO PLAY!');
+  end;
 end;
 
 // 

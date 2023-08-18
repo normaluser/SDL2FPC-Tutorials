@@ -27,6 +27,8 @@ type
       constructor create;
       destructor destroy; override;
 
+      procedure reset;
+
       // ILogicAndRender
       procedure logic;
       procedure draw;
@@ -68,6 +70,13 @@ end;
 destructor TTitle.destroy;
 begin
   inherited destroy;
+end;
+
+// 
+procedure TTitle.reset;
+begin
+  reveal := 0;
+  timeout := FPS * 5;
 end;
 
 // 
@@ -133,6 +142,8 @@ procedure initTitle;
 begin
   if title = Nil then
     title := TTitle.create;
+
+  title.reset;
 end;
 
 end.

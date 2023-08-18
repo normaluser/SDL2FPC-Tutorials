@@ -112,12 +112,6 @@ var
 constructor TStage.create;
 begin
   inherited;
-  fighterHead := createEntity^;
-  bulletHead := createEntity^;
-  pointsHead := createEntity^;
-  explosionHead := createExplosion^;
-  debrisHead := createDebris^;
-
   fighterTail := @fighterHead;
   bulletTail := @bulletHead;
   pointsTail := @pointsHead;
@@ -130,6 +124,14 @@ end;
 // 
 destructor TStage.destroy;
 begin
+  disposeEntityAndNext(@stage.fighterHead);
+  disposeEntityAndNext(@stage.bulletHead);
+  disposeEntityAndNext(@stage.pointsHead);
+
+  disposeExplosionAndNext(@stage.explosionHead);
+  
+  disposeDebrisAndNext(@stage.debrisHead);
+
   inherited destroy;
 end;
 
@@ -814,6 +816,7 @@ begin
     if resetTimer <= 0 then
     begin
       initHighscores;
+      app.delegate := highscores;
 
       highscores.addHighscore(score);
     end;
@@ -859,8 +862,6 @@ begin
   stage.initPlayer;
   stage.resetTimer := FPS * 3;
   stage.enemyTimer := 0;
-
-  app.delegate := stage;
 end;
 
 end.

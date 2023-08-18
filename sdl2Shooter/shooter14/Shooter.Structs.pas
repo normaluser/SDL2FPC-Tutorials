@@ -75,6 +75,11 @@ type
     name: String;
   end;
 
+procedure disposeEntityAndNext(t: PEntity);
+procedure disposeExplosionAndNext(t: PExplosion);
+procedure disposeDebrisAndNext(t: PDebris);
+procedure disposeTextureAndNext(t: PTexture);
+
 function createEntity: PEntity;
 function createExplosion: PExplosion;
 function createDebris: PDebris;
@@ -163,6 +168,78 @@ begin
     next := Nil;
   end;
   Result := e;
+end;
+
+// 
+procedure disposeEntityAndNext(t: PEntity);
+var
+  e: PEntity;
+  prev: PEntity;
+begin
+  prev := t;
+  e := t^.next;
+  while e <> Nil do
+  begin
+    prev^.next := e^.next;
+    Dispose(e);
+    e := prev;
+
+    e := e^.next;
+  end;
+end;
+
+// 
+procedure disposeExplosionAndNext(t: PExplosion);
+var
+  e: PExplosion;
+  prev: PExplosion;
+begin
+  prev := t;
+  e := t^.next;
+  while e <> Nil do
+  begin
+    prev^.next := e^.next;
+    Dispose(e);
+    e := prev;
+
+    e := e^.next;
+  end;
+end;
+
+// 
+procedure disposeDebrisAndNext(t: PDebris);
+var
+  e: PDebris;
+  prev: PDebris;
+begin
+  prev := t;
+  e := t^.next;
+  while e <> Nil do
+  begin
+    prev^.next := e^.next;
+    Dispose(e);
+    e := prev;
+
+    e := e^.next;
+  end;
+end;
+
+// 
+procedure disposeTextureAndNext(t: PTexture);
+var
+  e: PTexture;
+  prev: PTexture;
+begin
+  prev := t;
+  e := t^.next;
+  while e <> Nil do
+  begin
+    prev^.next := e^.next;
+    Dispose(e);
+    e := prev;
+
+    e := e^.next;
+  end;
 end;
 
 end.

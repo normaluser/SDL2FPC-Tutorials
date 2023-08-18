@@ -7,6 +7,7 @@ program main;
 {$H+}
 
 uses
+  heaptrc,
   {sdl2}
   sdl2,
   {shooter}
@@ -22,8 +23,14 @@ uses
 // 
 procedure atExit;
 begin
-  stage.destroy;
-  highscores.destroy;
+  app.delegate := Nil;
+
+  if stage <> Nil then
+    stage.destroy;
+
+  if highscores <> Nil then
+    highscores.destroy;
+
   background.destroy;
   audio.destroy;
   app.destroy;
@@ -73,6 +80,8 @@ begin
 
   then_ := SDL_GetTicks;
   remainder := 0;
+
+  app.delegate := highscores;
 
   while true do
   begin

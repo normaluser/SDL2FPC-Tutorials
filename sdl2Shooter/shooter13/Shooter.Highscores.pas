@@ -162,7 +162,10 @@ begin
   background.doStarfield;
 
   if app.keyboard[SDL_SCANCODE_SPACE] <> 0 then
+  begin
     initStage;
+    app.delegate := stage;
+  end;
 end;
 
 // 
@@ -181,8 +184,6 @@ begin
     highscores := THighscores.create;
 
   highscores.reset;
-
-  app.delegate := highscores;
 end;
 
 end.

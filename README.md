@@ -1,7 +1,7 @@
 
 # SDL2FPC-Tutorials
 
-<img src="./Shooter.png" style="width: 512px;" />
+<img src="./Shooter.png" style="width: 70%;" />
 
 ### Build
 

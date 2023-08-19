@@ -14,7 +14,7 @@ make write-shooter01
 make build-shooter01
 ```
 
-Original version program in C, Made by [Parallel Realities](https://www.parallelrealities.co.uk).
+Original version programing in C, Made by [Parallel Realities](https://www.parallelrealities.co.uk).
 
 ### License
 

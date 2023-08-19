@@ -18,6 +18,10 @@ Original version programing in C, Made by [Parallel Realities](https://www.paral
 
 ### License
 
+Copyright (C) 2015-2018,2022 Parallel Realities. All rights reserved.
+
+Copyright changed to:
+
 Copyright © CHUNQIAN SHEN, 2023. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.

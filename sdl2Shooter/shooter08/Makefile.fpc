@@ -23,7 +23,7 @@ files= \
 [compiler]
 targetdir=.
 unittargetdir=./units/$(CPU_TARGET)-$(OS_TARGET)
-options=-Mobjfpc -Schi -O1 -g -gl -l -vewnhibq $(DBG_OPTIONS) -o$(TARGET_PROGRAMS)
+options=-Mobjfpc -Schi -O1 -g -glh -l -vewnhibq $(DBG_OPTIONS) -o$(TARGET_PROGRAMS)
 unitdir= \
 	$(FPCPKGDIR)/sdl2forpascal/units \
 	/usr/local/lib \

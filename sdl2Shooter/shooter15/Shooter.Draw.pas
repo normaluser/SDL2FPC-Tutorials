@@ -32,6 +32,10 @@ uses
   Shooter.App,
   Shooter.Structs;
 
+procedure addTextureToCache(name: String; sdlTexture: PSDL_Texture); FORWARD;
+
+function getTexture(name: String): PSDL_Texture; FORWARD;
+
 // 
 procedure prepareScene;
 begin

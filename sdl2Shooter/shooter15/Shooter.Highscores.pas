@@ -63,6 +63,8 @@ uses
   Shooter.Text,
   Shooter.Title;
 
+function highscoreComparator(constref a: THighscore; constref b: THighscore): Integer; FORWARD;
+
 // 
 constructor THighscores.create;
 var

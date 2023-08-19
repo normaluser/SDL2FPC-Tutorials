@@ -23,6 +23,9 @@ uses
   Shooter.Defs,
   Shooter.App;
 
+procedure doKeyUp(event: PSDL_KeyboardEvent); FORWARD;
+procedure doKeyDown(event: PSDL_KeyboardEvent); FORWARD;
+
 // 
 procedure doKeyUp(event: PSDL_KeyboardEvent);
 begin

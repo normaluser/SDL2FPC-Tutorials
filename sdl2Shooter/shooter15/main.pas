@@ -20,6 +20,9 @@ uses
   Shooter.Title,
   Shooter.Stage;
 
+procedure atExit; FORWARD;
+procedure capFrameRate(var then_: Integer; var remainder: Double); FORWARD;
+
 // 
 procedure atExit;
 begin

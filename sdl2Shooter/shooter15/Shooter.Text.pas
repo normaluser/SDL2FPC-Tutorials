@@ -18,8 +18,8 @@ const
   GLYPH_HEIGHT = 28;
   GLYPH_WIDTH = 18;
 
-procedure initFonts;
 procedure drawText(x, y: Integer; r, g, b: Integer; align: Integer; outText: String);
+procedure initFonts;
 
 // ******************** implementation ********************
 implementation
@@ -32,11 +32,6 @@ uses
 // ******************** var ********************
 var
   fontTexture: PSDL_Texture;
-
-procedure initFonts;
-begin
-  fontTexture := loadTexture('gfx/font.png');
-end;
 
 procedure drawText(x, y: Integer; r, g, b: Integer; align: Integer; outText: String);
 var
@@ -69,6 +64,11 @@ begin
       Inc(x, GLYPH_WIDTH);
     end;
   end;
+end;
+
+procedure initFonts;
+begin
+  fontTexture := loadTexture('gfx/font.png');
 end;
 
 end.

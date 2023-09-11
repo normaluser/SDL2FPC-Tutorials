@@ -1,5 +1,5 @@
 
-// Copyright (C) 2023 CHUNQIAN SHEN. All rights reserved.
+
 
 unit Shooter.Background;
 
@@ -113,7 +113,7 @@ var
 begin
   for i := 0 to (MAX_STARS - 1) do
   begin
-    c := 32 * stars[i].speed;
+    c := (32 * stars[i].speed) - 1;
 
     SDL_SetRenderDrawColor(app.renderer, c, c, c, 255);
     SDL_RenderDrawLine(app.renderer, stars[i].x, stars[i].y, stars[i].x + 3, stars[i].y);
